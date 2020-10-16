@@ -1,0 +1,11 @@
+# api for set of objects
+apiVersion: v1
+#  type of object
+kind: Pod
+metadata: 
+  name: posts
+spec: 
+  containers:
+    # container name
+    - name: posts
+      image: stephengrider/posts:0.0.1

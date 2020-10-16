@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1 
+  #  selector says he k8s look at all pods with created with matchlabels param and watch it
+  selector:
+    matchLabels: 
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+      - name: posts
+        image: stephengrider/posts:0.0.1 
