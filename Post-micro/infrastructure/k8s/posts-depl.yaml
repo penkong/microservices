@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: posts-depl
 spec:
-  replicas: 1 
+  replicas: 1
   #  selector says he k8s look at all pods with created with matchlabels param and watch it
   selector:
-    matchLabels: 
+    matchLabels:
       app: posts
   template:
     metadata:
@@ -14,5 +14,20 @@ spec:
         app: posts
     spec:
       containers:
-      - name: posts
-        image: stephengrider/posts:0.0.1 
+        - name: posts
+          image: stephengrider/posts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts
+  #  default type is clusterIp
+  # type: ClusterIP
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000
