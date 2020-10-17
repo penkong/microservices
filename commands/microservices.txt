@@ -1,0 +1,101 @@
+what is microservice ?
+
+
+all logic to one feature work correctly.
+
+
+
+challenge : Data management between services
+
+each service gets its own database.
+services never will reach to each other dbs.
+
+
+it is pattern : Database per service
+
+we want run it independetly.
+
+
+
+
+
+Sync and Async in microsevices :
+
+
+Sync : services communicate with each other using direct request
+       web of dependency
+
+
+
+Async : Services communicate with each other with events. event based
+        Event bus , each service emit events or receive events from event
+        bus.
+
+
+second way async communicate :
+each service , one db.
+
+how catch our need info from other serivces.
+
+simontinously save to db and send event to Event bus. for any body care 
+about it.
+
+
+
+
+============================================================
+
+
+
+Blog Post application :
+
+
+
+============================================================
+
+
+running service with Docker :
+
+
+build with docker files and docker ignore files.
+
+each service.
+
+
+now we want use k8s
+
+service: sth that give us access to running ads or running
+container.
+
+kubectl apply -f posts.yaml 
+
+kind pod : it is object wrap up container.
+metadata: config ooptions for object we are going to create.
+spec : list of config options the pod that we are about to create. 
+
+
+k get pods
+
+
+
+deployment is a k8s object that is intended to manage set of pods.
+ it check pods exists.
+ use for update.
+
+
+#      selector        says he k8s look at all pods with created with matchlabels param and watch it
+
+in template labels define label for selector.
+
+
+
+
+
+
+
+
+
+
+
+
+

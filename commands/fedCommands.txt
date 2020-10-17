@@ -1,0 +1,8 @@
+/usr/pgsql-12/bin/postgresql-12-setup initdb
+systemctl enable postgresql-12
+systemctl start postgresql-12
+
+
+sudo nano -w /etc/hosts
+ sudo httpd -t
+

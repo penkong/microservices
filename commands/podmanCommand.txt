@@ -1,0 +1,20 @@
+sudo vi /etc/systemd/system/mongod.service
+systemctl start mongod.service
+systemctl enable mongod.service
+
+podman run -p 27017:27017  mongo
+
+sudo podman run -d --name mongod -p 27017:27017  mongo
+
+
+
+
+podman pod create --name postgresql -p 5432 -p 9187
+podman run -d --pod postgresql -e POSTGRES_PASSWORD=password postgres:latest
+podman run -d --pod postgresql -e DATA_SOURCE_NAME="postgresql://postgres:password@localhost:5432/postgres?sslmode=disable" wrouesnel/postgres_exporter
+
+podman pod top postgresql
+curl localhost:9187/metrics
+podman generate kube postgresql > postgresql.yaml
+podman pod rm postgresql -f
+podman play kube postgresql.yaml

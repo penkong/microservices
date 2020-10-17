@@ -1,0 +1,64 @@
+angular :
+Udemy – The Modern Angular Bootcamp [2020] 2020-5
+
+js:
+Udemy – The Modern Javascript Bootcamp Course (2020) 2020-4/2020-5
+
+network: 
+Udemy – Introduction to Computer Networks for Non-Techies 2019-4
+Udemy – The Complete Networking Fundamentals Course. Your CCNA start 2020-5
+
+typescript :
+Udemy – Typescript: The Complete Developer’s Guide 2019-6
+Udemy – Understanding TypeScript – 2020 Edition 2020-3
+
+nginx: 
+Udemy – Nginx Fundamentals: High Performance Servers from Scratch 2018-6
+Udemy – Nginx 2019 – Beginner to Advanced 2019-3
+
+MBA: 
+Udemy – MBA in a Box: Business Lessons from a CEO 2019-1
+
+react: 
+Udemy – Advanced React and Redux 2020-5
+Udemy – 2019 Update! React Testing with Jest and Enzyme 2020-2
+Udemy – Server Side Rendering with React and Redux 2019-12
+Udemy – Complete Next.js with React & Node – Beautiful Portfolio App 2020-5
+Udemy – React Node FullStack – Social Network from Scratch to Deploy 2019-3
+Udemy – Build a Slack Chat App with React, Redux, and Firebase 2019-4
+Udemy – Complete React Developer in 2020 (w/ Redux, Hooks, GraphQL) 2020-5
+
+GraphQl:
+Udemy – The Modern GraphQL Bootcamp (with Node.js and Apollo) 2020-1
+Udemy – GraphQL with React: The Complete Developers Guide 2020-4
+
+node :
+Udemy – Node.js, Express, MongoDB & More: The Complete Bootcamp 2020 2019-12
+Udemy – Node.js: The Complete Guide to Build RESTful APIs 2018-4
+Udemy – Node JS: Advanced Concepts 2020-3
+Udemy – NestJS Zero to Hero – Modern TypeScript Back-end Development 2020-5
+Udemy – ChatBots: Messenger ChatBot – DialogFlow and nodejs 2019-7
+Udemy – Socket.IO (with websockets) – the details. (socket io v2) 2019-12
+Udemy – Learn Nodejs by building 12 projects 2018-5
+
+trade forex :
+Udemy – Forex Trading A-Z™ – With LIVE Examples of Forex Trading 2020-3
+Udemy – Forex Robots: Automate Your Trading – Forex Robot Included! 2020-1
+Udemy – Candlestick Patterns to Master Forex Trading Price Action 2019-3
+Udemy – The Complete Technical Analysis Trading Course (New 2019) 2019-5
+Udemy – The Complete Financial Analyst Training & Investing Course 2018-1/2019-10
+
+linux bash : 
+Udemy – Learn Linux in 5 Days and Level Up Your Career 2020-3
+Udemy – Bash Scripting and Shell Programming (Linux Command Line) 2019-4
+
+Docker :
+Udemy – Docker and Kubernetes: The Complete Guide 2020-4
+Udemy – Docker for Node.js Projects From a Docker Captain 2020-2
+Udemy – Docker Mastery: with Kubernetes +Swarm from a Docker Captain 2020-4
+Udemy – Docker Swarm Mastery: DevOps Style Cluster Orchestration 2019-3
+Udemy – GitLab CI: Pipelines، CI/CD and DevOps for Beginners 2020-2
+Udemy – Learn DevOps: The Complete Kubernetes Course 2020-1
+
+PWA : 
+Udemy – Progressive Web Apps (PWA) – The Complete Guide 2019-12

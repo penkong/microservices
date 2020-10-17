@@ -1,0 +1,1635 @@
+namespacing isolating resources per process (or group of process)
+
+control groups (cgroups) limit amount of resources used per process must do by
+us.
+
+in windows and mac docker install a virtual linux machine .
+
+
+
+
+
+
+
+image = fs snapshot(contain program inside) + startup commands
+
+container = running process + kernel + hardware segment of this process.
+
+
+
+
+
+
+
+docker run <image> (command = or override command)
+
+docker run busybox echo hi there
+docker run busybox ls
+
+
+
+
+
+
+
+ls and echo are programs that exist inside busybox
+
+for example busybox has fs snapshot of : bin , dev , etc , home , proce and ...
+
+docker ps    ===    list all running containers
+
+docker ps --all   ===  list of all container you ever created.
+
+also use to get running container id.
+
+
+
+
+
+
+
+
+
+
+container lifecycle
+
+docker run == docker create + docker start
+
+docker create <image>  ===> give us id of docker container
+
+docker start -a <image id>
+
+without -a just show the id of started image
+
+-a   ===   make docker watch of output of running container.
+
+
+
+
+
+
+
+
+to restart a container again
+docker ps --all
+docker start <id of exited container>
+
+
+
+
+
+
+
+
+remove stopeed containers
+also remove build cache
+
+docker system prune
+
+
+
+
+
+
+
+
+log output.
+if forget -a
+
+docker logs <started container id>    ==> show out put of container.
+
+
+
+
+
+
+
+
+stop container is already runned
+
+docker stop <container of running id> ==> it send SIGTERM(terminate signal)
+					 can do clean up works like saving ...
+
+stop + 10s = kill
+
+docker kill <container id of running> ==> it send SIGKILL(kill signal) right now.
+
+
+
+
+
+
+
+
+multi command containers
+
+for example we want to access cli of redis
+for ex. we want redis-server + redis-cli
+
+docker exec   ===   execute an aditional command for and in container.
+
+to start second program in container
+docker exec -it  <container id is running>  <command to execute>
+
+exec = run another command
+-it  = allow us to provide input to container
+
+-it flag :
+each process in linux have 3 communicate channel attached to it
+	STDIN 		    STDOUT 		  STDERR
+     input terminal     output terminal          show error
+
+docker exec -it 3432432fsdf redis-cli
+
+// it's attacher to our command
+-it = 
+      -i(mean when exec command in termianl we want attach our terminal to it)
+        (means stuff i type direct it to redis-cli)
+    + -t(show text pretty format, auto complete and other things ...)
+
+
+most common use of docker exec
+open a shell in context of running container
+
+docker exec -it <container id running >   <command program like sh>
+ls
+export b=5
+
+
+also can do this
+docker run  -it <image> <call command>
+dont allow to you run any other process
+
+
+
+
+
+
+========================================
+
+
+
+
+
+
+
+
+
+creating docker images
+
+docker file     ---> docker client ---> docker server ---> image
+do config in it
+
+
+
+totall
+1. specify base image 
+
+2. run some commands to add addiontional program
+
+3. specify a command to run on container startup
+
+
+
+
+
+
+
+
+
+make Dockerfile
+use an existing docker images as base 
+
+
+download install dependency
+
+
+tell image what to do when it starts
+
+
+
+
+
+
+
+
+
+for build 
+
+docker build .
+
+docker run <generated id of image>
+
+
+
+
+
+
+
+
+
+docker file tear down
+2 part
+
+instruction tell to docker server   ,    argument to the instruction
+	FROM 					alpine
+	RUN
+	CMD
+
+writing a docker file === like a computer with no os install chrome
+for every line of instruction docker make intermediate file.
+every line create image of last line and do his work then rm it.
+finally rm first container and out put image to us
+
+
+
+
+
+
+
+
+
+
+tagging image
+					 this is tag
+docker build  -t <yourdockerId/projectname/version>  .(directory of files)
+
+
+
+
+
+
+manual image generation with docker commit
+
+docker commit -c 'CMD ["redis-server"]' <id or running container>
+
+
+
+
+
+=============================================================
+
+
+
+node app example 
+
+use package.json add deps there and add scripts
+
+write logic
+
+then add dockerfile.
+
+
+
+
+we must COPY files and folders from local to temporary container to let
+his do his job.
+
+
+COPY (path of files relative to build context)  (place of file inside contaienr)
+
+
+
+
+
+
+
+
+
+PORT MAPPING
+
+after this 
+must do Container Port mapping 
+
+because your local is seprate machine from container 
+that port in code defined on linux machine on container 
+you must port request for ex from 8080 of your local to 8080 of docker contaienr.
+
+docker run -p <route of income from local>:<port in container> <name of container = image id >
+
+
+
+
+
+
+
+
+
+
+DEFINE WORKDIR
+
+
+must specifiying a working directory for copied image
+
+WORKDIR /usr/app top of COPY
+
+
+
+
+
+
+Unnecessory rebuilds
+we want change code but main files of deps
+are still there without changes.
+
+we copy only package then run command
+and after that we add changes because use cache on npm pakcages
+
+
+
+
+
+===================================================================
+
+
+
+
+
+
+Docker Compose
+
+why docker compose ??? 
+use mulitple docker container and docker file
+
+when we want have info seprated or want scale one node of app to higher
+
+
+
+
+each container is in isolation you can not communicate to each other
+
+each container need networking structure.
+
+docker compose do this for us.
+
+help us to dont write command of docker cli.
+
+help connect multiple container
+
+
+
+
+
+
+encode docker cli command --> to docker-compose.yml --> feed to docker-compose cli
+
+what way we write
+
+first define containers we want to create
+then make each use
+
+
+
+
+CREATE DOCKER-COMPOSE YML FILE.
+
+services: (a service is contaienr in docker world)
+	redis
+		make it use
+		(specify image)
+
+	nodeapp 
+		specify build
+		make it use his dockerfile
+		do map porting let outworld access it.
+		"local:inside-container"
+		
+		
+		
+consider this
+must add the location of other services in nodeapp
+add name of your service in docker-compose.yml file to your code.
+
+
+
+
+
+
+
+NOW HOW USE IT?
+DOCKER-COMPSE COMMANDS
+
+
+
+
+docker run <generated image>
+
+become 
+
+docker-compse up
+
+
+and 
+
+
+docker build .
+docker run <generated iamge>
+
+become 
+
+docker-compose up --build(if we want rebuild image from docker file.)
+			 (to get latest changes in .yml file)
+			 
+			 
+			 
+			 
+		
+		
+		
+docker run -d <image>
+run docker container but execute it in background.
+
+docker ps   === show running 
+docker stop <id>
+
+
+
+
+because for each container in our app we dont need to do
+docker stop <id>
+
+	 
+STOP docker-compose:
+docker-compose down
+
+Launch in background: 
+docker-compose up -d 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+Maintanence or crash case :	
+
+need automatic refresh service if it down
+
+restart policies we use
+
+	"no" : never attempt to reset,
+	always : if stop for any reason reset
+	         (use things like web-server)
+	on-failure : only reset if container stops with an error code
+		     (use for worker process)
+	unless-stopped : always reset unless we forcibly stop it.
+	
+		 
+			 
+			 
+	
+	
+	
+	
+container status: 
+
+docker-compose ps  ( only work in your .yml directory)
+
+
+
+
+
+
+=====================================================================
+
+
+
+
+Now PRODUCTION STATE :
+
+--> development --> testing --> deployment -->
+
+
+	repo
+branches    master(auto deploy to our deploy area)  --> send to travis ci -->
+push to hosting server.
+
+
+develop -> pull request to merge -> travis do tests -> merge with master ->
+travis do test on prod mode and deploy -> hosting. 
+
+must do pull request from branch to master to deploy app(merge stuff)
+not push code to master
+
+
+
+but what docker do in this ????
+
+docker is  tool for normal, make it a lot easier.
+but not requirement.
+
+ 
+ 
+ 
+ 
+ 
+we create 2 docker file : dev and prod
+
+dev  (Dockerfile.dev) work with npm run start
+
+prod (Dockerfile) work with npm run build
+
+
+
+DEV DOCKERFILE:
+
+must run dockerfile with custom name (.dev)
+
+docker build -t <name> -f(specify file to use build image) <name of file> .
+
+to start container :
+
+docker run -it -p port:port image
+
+
+
+
+
+
+
+
+
+
+
+
+now we want to image reflect changes in code :
+
+DOCKER VOLUMES :
+
+we adjust command of docker run file.
+
+use volumes
+
+with volume we set up a placeholder of sorts inside of container rather than copy
+(inside WORKDIR) 
+it point back to local machine.
+
+
+volume : is mapping from a folder inside container to folder in local.
+
+each -v is switch 
+
+docker run -p port:port -v /app/node_modules -v   $(pwd):/app   <iamge id>
+                                             (pwd map to /app in workdir)
+            (because we have not node_modules in dev we say use from container)
+            (not override node_modules)
+            
+but we must shorten it.
+
+
+
+
+
+
+
+
+
+Short volume with docker compose :
+
+add volumes to services section of .yml
+
+
+
+
+
+
+for use different file for docker to use with docker-compose :
+
+build:
+	context: (where files and folder for this image pull from)
+	dockerfile: Dockerfile.dev
+
+
+
+
+
+
+
+
+
+
+
+
+exec test :
+
+docker run <id of container> npm run test
+
+but test not re run.
+
+docker run -it <id> npm run test
+
+now what to do when for update changes in test? 
+
+need to make snapshots work alive like before 
+with volume
+
+bad way : can go and find alive container and do
+docker exec -it <id> npm run test 
+(it works when docker-compose up work with volumes)
+
+
+better way:
+make second service to run our test in .yml 
+and must override starting command.
+but have not access to stdin of test.
+
+
+but we need to manipulate test suits
+
+we use docker attach command
+
+docker attach === with it we can forward input from terminal directly to specific 
+                  container
+docker attach <id of container you want>
+
+with dockere attach we attach to stdin of npm process not npm run test
+
+
+
+
+
+
+
+
+NOW IN PROD MODE :
+
+we need nginx 
+
+why?
+
+because of dev server does not exist.
+
+
+we  need production server to response request of browser.
+
+
+
+
+
+
+
+
+
+multi step docker build 
+
+we need new dockerfile for prod env.
+we need build folder.
+but need nginx.
+
+we need 2 base image
+
+because of that we need multi step docker
+build phase               run phase 
+
+
+how impelemnt it?
+
+
+write with as builder
+
+
+in second phase add
+
+COPY --from=builder
+
+docker build .
+docker run -p ourport:(80 nginx)
+
+
+
+
+====================================================================
+
+
+
+
+NOW IMPLEMENT FLOW TO DEPLOY :
+
+github travis ci and aws
+gitlab gitlab ci and abrarvan.
+
+
+
+go to travisci.org connect your github or lab to it.
+
+
+we must inform travis what we want he do.
+
+
+we create .tavis.yml it have some direction to tell to travis what to do.
+
+
+
+steps for dev: 
+tell need copy of docker running
+
+build our image use Dockerfile.dev
+
+tell to run test suits and how
+
+tell travis how deploy to server aws
+
+
+
+.travis.yml
+
+sudo : required (because of docker)
+services:
+ - docker (we need a service named docker)
+ 
+before_install: (a series of command exec before install)
+ - (docker build command tagged name)
+
+script:
+ - (travis watch output of these commands here with test) -- --coverage(to let test finish)
+
+
+
+
+
+
+
+automatic build creation :
+just push to master
+
+
+
+
+
+
+elastik beanstalk : good for one container.
+
+create new app.
+need create env.
+select server or worker.
+(base config -> platform -> docker)
+create env.
+
+
+request pass from load balancer.
+it auto add more virtual machine .
+auto scale app.
+
+
+
+
+
+
+
+
+
+TRAVIS CI FOR CONFIG :
+add more config to travis
+
+add deploy section to file .
+provider
+region
+travis zip file and copy on hard drive called bucket_name.
+
+
+
+after adding this need 
+
+
+
+
+to expose port in dockerfile.
+
+EXPOSE 80
+
+
+
+
+
+
+
+
+
+WORKFLOW ON GITHUB :
+
+
+git checkout -b feature
+
+create and merge pull request :
+
+
+
+
+
+
+
+
+=================================================================
+
+
+
+
+
+multiple container
+
+its better not build image in every steps
+maybe we have outside dependencies
+how to connect to db from contianer.
+
+
+
+
+
+
+nginx ---- recat         worker ]
+      ---- exprress ---- redis  ]
+                    ---- postgress
+
+
+
+make worker listen to redis
+maker server with pg and redis
+
+ 
+
+
+		 
+			 
+			 
+define each service front back and worker a dockerfile.dev
+
+define compose file
+but we must feed with env variables.		 
+			 
+value take from computer.
+
+add 2 more services for worker and front.
+	 
+			 
+			 
+			 
+			 
+			 
+			 
+for .yml file in prod form
+specify docker dependency
+build test version of front
+run 
+build prod version of all proj
+push to docker hub
+tell elastik to update
+		 
+			 
+			 
+docker login
+		 
+			 
+			 
+
+=====================================================
+=====================================================
+-====================================================
+
+kubernetes 
+
+
+request come through load balancer.
+
+what is and why we use it???
+
+kubernetes have cluster 
+
+cluster = master + one or more nodes(vps or computer each run sets of
+container)
+
+nodes manage by master(it contains programs)
+
+we give direction to master.
+
+
+kubernetes is system for running many containers over multi machines
+why ? when you need run many containers with many image.
+
+
+
+
+
+
+
+
+
+
+
+in development area it is with minikube
+
+
+in production do it yourself or managed soulutions
+
+
+
+
+
+
+
+
+minikube : create and run kubernetes cluster in your machine
+           use for managing vm(node) itself
+           (ONLY LOCAL) and (only work with one node).
+
+
+kubectl : to interact with cluster master,
+          use for managing containers in the node.
+          (BOTH PROD AND LOCAL) 
+
+
+
+
+Virtual Machine (node) = container + container + ... 
+
+
+
+
+steps to install 
+install kubectl
+install a vm driver virtual box
+install minikube
+
+
+
+
+
+
+minikube start
+minikube status
+
+
+
+check info of cluster
+cmd : kubectl cluster-info
+
+
+
+
+
+
+
+
+
+
+-------------------------
+
+
+
+
+
+objection : make fibo-client(react) image running on our local kubernentes
+            cluster running as a container.
+            
+            
+            
+            
+            
+            
+            
+difference between docker-compose vs kubernetes.      
+            
+
+docker-compose :
+each service , build an image , 
+               a container we want to create,  
+               each has own networking requirements.
+
+
+kubernetes :
+each service , expect allready all of them built (there is no build pipe),
+               one config file per -$object$- we want to create.
+               we have manually setup all networking.
+               
+        
+        
+
+steps : get a container running on our local kubernete cluster  
+
+make sure our image is hosted on docker hub
+make one config file to create the container($object).
+make one config file to setup networking.
+
+
+
+dl image
+pull image from docker hub
+
+config to create one file from container
+make clietn-pod.yaml(we made $object)
+
+
+networking setup
+client-node-port.yaml
+
+
+
+
+
+
+
+
+description for client-pod :
+we make $object 
+
+we feed those config file to kubectl
+
+kubectl interpert and make object from config file
+object = a thing exist in k8s cluster.
+
+ex object : StatefulSet, ReplicaController, Pod , Service 
+
+objects have different purpose monitionring running web and ...
+
+kind : represent type of object we implement
+
+pod : run container , service : setup networking
+
+
+
+
+
+
+apiVersion : v1 
+it limits type of object we can specify that we want create
+open access to predefined set of objects.
+it access to componentStatus , configMap, Endpoints ,Event ,pod 
+Namespace and ...
+
+apiVersion : apps/v1
+it access to ControllerRevision StatefulSet
+
+
+
+
+what POD is ??
+vm = node
+node use to run different type of objects.
+
+node -> 
+pod(grouping of containers with a very common purpose) -> 
+container...
+
+
+
+
+the smallest thing we deploy is pod 
+why make pod?? 
+purpose of pod is to allow group of containers
+with a very similar purpose
+containers are really coupled use in pod.
+
+then name prop in spec containers can use for connect networking
+inside pod between containers.
+
+metdadata : info about pop and logging stuff . 
+
+
+
+
+
+
+
+what is Service??
+
+setting up networking in a kubernetes Cluster.
+
+it have 4 subtype
+ClusterIP
+NodePort  === expose a container to the outside world (for dev only)
+LoadBalancer
+Ingress	
+
+
+
+
+
+
+
+
+mean it is a Service NodePort
+
+browser -< kube-proxy -< Service NodePort -< Pod(port3000 - multi client)
+
+every node hase kube porxy
+one single window to outside.
+
+
+selector find other object with it name
+label selector system connect service and Pod
+
+port : a port that other pod or container in cluster can access to current
+       client app
+       
+targetPort : a port inside pod we want open traffic to it. send icoming 
+	     traffic to this.
+	     
+nodePort : (30000 - 32767) a port can access from browser.
+	   if not specfied go random. (not prod env)
+ 
+
+
+
+
+
+
+Now feed file to kubectl :
+
+
+kubectl          apply                  -f           <file name>
+
+cli for         change current        specify         path to file   
+interact        config                  file
+with cluster
+
+
+
+run 2 time
+
+
+
+
+to inspect status of 2 object:
+
+kubectl get pods
+
+READY 1/1   === one copy running / numbers we want to have
+
+
+kubectl get services
+
+
+
+
+
+now we must ask minikube to give us address to access vm(node) from
+our browser.
+
+minikube ip
+
+
+
+
+
+
+
+
+
+
+
+
+what happened when we feed config file to kubectl?
+
+
+deploy file ----> kube-apiserver(master) ===> NODES (VMS)with objs inside
+
+(i want run4 copies)---> table of responsibilities(3 or 4 programs) -> 
+
+kube-apiserver: i monitor current status of each node in cluster to do
+                theri work.
+                
+                
+
+
+
+
+impertative        vs    declarative deployment
+
+do exactly               our container should look
+steps to arrive          like this (run 4 copies for me)
+
+
+
+
+
+
+
+
+
+------------------------------------
+
+Now we want to update our eixisting pod to use the new image
+
+
+update an object (in place):
+update config
+kubectl
+master understand and make update Pod in vm(node)
+	name and kind are unique identifying
+	if dont change name just update happen
+
+how find out it updted?
+
+
+
+
+
+
+
+
+
+
+get detailed info of an object : 
+
+kubectl describe <object type> <object name>
+
+
+
+
+
+
+something(port ... ) in config can not update
+what is workaround?
+
+we use new type of object 
+
+Deployment : is obejct that is meant to maintain a set of identical pods
+	     (one pod , 2 pod or more and constantly work to check pods
+	     and can correct config and make it always runable state)
+	     it runs set of identical pods.
+	     monitor state of each pod
+	     good for dev and production.
+	     
+
+when we create it something attach to it : a pod template , a little block
+	of config. 
+
+
+selector in deployment :
+by this we trace pod creation in master
+
+
+
+
+
+
+
+delete exist pod object.
+
+
+kubectl delete -f <config file >
+
+
+
+
+
+
+
+create Deployment :
+
+kubectl apply -f <config>
+
+
+get status :
+
+kubectl get pods
+kubectl get deployments
+
+
+
+
+
+
+
+kubectl get pods -o wide
+kubectl get deployments -o wide 
+
+every pod we create get his own ip assign to it
+because change in pod maybe cause ip change we 
+have serivce layer
+
+
+
+
+
+
+
+
+
+update deployment when new image available :
+
+update docker image in hub.
+
+triger Deployment update
+(add an extra step to trigger it or use an imperative command)
+
+kubectl   set   image   <object type>  / <object name>    <container name> = <new image to use>
+       to change  an        type        name of object      name of the
+                                                       contaienr(config)
+
+kubectl set image Depoloyment/client-deployment cilent(name in containers)
+<new image>
+
+kubectl set image deployment/client-deployment client=stephengrider/multi-client:v5
+
+
+
+
+
+
+
+
+what happen when we feed config file
+
+
+kubectl -> master -> vm -> docker-client -> docker-server -> image cache
+-> docker hub.
+
+
+
+
+
+
+
+
+
+
+how set docker-client work in vm?
+Reconfigure Docker CLI
+
+eval $(minikube docker-env) ===> connect to daemon in minikube
+
+can debug, kill kubernetes container to test heal , delete cached image
+
+
+also kubectl have this
+
+kubectl exec -it <deploy id> sh
+
+
+
+
+
+
+
+-----------------------------------------------------
+
+
+
+multi container app with kubernetes :
+
+
+Architecture :
+
+                  clusterIP service
+                     deployment
+                     clitent pods
+ingress services                                           deployment
+                  clusterIP service                         worker
+		     deployment    
+		     server pods       clusterIP service   deployment
+		     					    redis
+
+                                        clusterIP serivce  deployment
+                                                            postgres
+                                                          
+                                                            postgres pvc
+
+
+
+path : 
+create a config file for each service, deployment
+test on minikube.
+travis flow to build image and deploy
+deploy to cloud provider.
+
+
+
+
+
+
+
+we need 11 config k8s file
+
+
+
+
+
+
+
+
+
+
+ClusterIP Service :
+
+service == do some networking
+NodePort == only dev env - expose pods to outside
+
+clusterip == allow any other object insdie our cluster to access the
+             object that the cluster ip is pointing
+	     provide access to object (not from outside cluster)
+	     
+
+
+ClusterIP config  
+
+
+remvoe past object
+
+kubectl delete deployment client-deployment
+
+kubectl delete service client-node-port
+
+
+
+
+
+
+
+
+for apply group of apply :
+
+kubectl apply -f k8s
+
+
+multi object config seprate with ---
+
+
+
+
+
+
+
+postgres pvc - persistant volume claim
+
+we must keep data if postgres pod lost.
+ 
+must put volume on host machine.
+
+request to write ==> pod postgress ==> write to volume
+
+
+
+
+
+
+
+
+
+pre volume : some type of mechanism that allows a container to access
+	     a file system outside itself.
+
+Kubernetes Volume : a very particular object . a object that allow a
+                    container store data on pod level.
+
+types : 
+PVC :  advertisment possible storage item - billboard . 
+       we write what pv is available ,
+       kubernetes is sales person . pv s are created ahead of time like
+       product in store (staticaly provisioned persistance volume)
+       if we want special one k8s will make for us (if we ask for it)
+       (dynamically provisioned persistant volume)
+       
+PV : (it is outside pod)
+ 
+V (survive container reset but not pod reset)
+
+
+
+
+
+we take volume claim and attach it to pod config
+and hand it to k8s.
+
+
+
+
+access mode : 
+readwriteonce : can be used by a single node
+readonlymany : multiple nodes can read from this.
+readwritemany : can be read and written to by many nodes
+
+storage options :
+azure , hard , google and ... options on cloud.
+kubectl get storageclass
+
+provision how kube going to decide how create pv .
+k8s.io/minikube-hostpath 
+ 
+kubectl describe storageclass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

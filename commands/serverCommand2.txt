@@ -1,0 +1,168 @@
+dl nginx binary with wget
+ls -l check content
+tar -zxvf name of file ( unrar)
+
+change to extract directory
+./configure to compile
+
+yum groupinstall "Development Tools"
+apt-get install build-essential
+
+need more some dependency
+apt-get install libpcre3 libpcre3-dev
+zlip1g zlib1g-dev libssl-dev
+
+yum install pcre pcre-devel zlib zlib-devel openssl openssl-devel
+
+run ./configure
+
+now add configuration flags
+./configure --help or go website
+
+./configure --sbin-path=/usr/bin/nginx
+--conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+
+
+to comile source code
+make
+
+to install compile source
+make install
+
+check
+ls -l /etc/nginx
+
+nginx -V
+
+start with 
+nginx 
+
+ps aux | grep nginx
+
+check ip
+
+// next step configure system service for nginx - adding nginx as systemd
+
+nginx -h
+nginx -s stop
+
+// to enable nginx as systemd
+
+touch /lib/systemd/system/nginx.service
+copy from website
+nano file path
+ctrl o 
+confirm
+ctrl x
+
+
+systemctl start nginx
+
+systemctl status nginx
+
+start on boot
+systemctl enable nginx
+
+// start firewallD
+sudo systemctl unmask --now firewalld
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --reload
+
+curl localhost
+
+
+///
+///
+-------- CONFIGURATION TERMS
+nginx.conf
+context(scope) : a section within the config
+where directive set
+http {
+	server {
+	// in sever we define virtual host
+		location {
+			for mathcing uri location for incoming requets
+		
+		}
+	
+	}
+}
+main.context for config global directive to apply to master process
+
+directive : a specific config options that get set in config files and contain name  value
+
+server {
+--->	server_name mydomain.com
+}
+
+/// create virtual host
+create basic virtual host to server static
+files
+add files with file zilla to root/sites/demo 
+put static file there
+
+we are going to config file /etc/nginx/nginx.conf
+
+
+we need to keep events{} context to config consider valid
+
+in http {}
+first need to define virtual host , each virtual host being a new server context or server block
+
+server {} resposible for listening on port
+http 80 and https 443
+
+next set server_name with value domain name or ip
+
+finaly define root directive this being root path from which nginx will serving request or iterperting static request
+
+
+after that save change to nginx.conf
+
+reload
+systemctl reload nginx
+reload prevent downtime but restart do if we have error on config file
+
+to check is config ok
+nginx -t
+
+must use /var/yourRoute as root 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

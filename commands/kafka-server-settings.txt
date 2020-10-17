@@ -1,0 +1,332 @@
+dl kafka
+tar -xvzf kafkafolder
+check java install
+install java
+/----------- on vps 
+take ip of server
+login server
+ssh root@yourIp
+install java
+make folder downloads
+download binary
+curl link -o Downloads/kafka
+mdir kafaka cd kafka
+tar -xvzf ~/Downloads/kafak.tgz --strip 1
+ls 
+ls bin
+ls config
+/---------- continue on local
+cat config/server.properties
+alson need zoekeeper to run kafaka in first stage
+hint: check command list on your system cd /bin
+can open kafka in vscode for do settings stuff.
+
+kafka server == kafka broker
+bin/kafka-server-start.sh config/server.properties
+but it not work need zoe keeper
+you can read log in logs/server.log
+bin/zookeeper-server-start.sh config/zookeeper.properties
+it will start on port 2181
+to read zookeeper go to tmp/zookeeper
+now can start kafka
+bin/kafka-server-start.sh config/server.properties
+check logs on server.log
+Awaiting socket connections on 0.0.0.0:9092.
+in tmp/kafka-logs we save messages from producer and consumers
+can do cat /tmp/kafka-logs/meta.properties to see some info
+to send message to kafka server it must send to specific topic.
+
+zookeeper + kafka server(it can be more) = one cluster
+you can connect to that cluster with one or other kafka server ports
+
+
+how make topic???
+by run kafka-topics.sh script
+with this we first connect to kafka cluster and make topic.
+
+create topic
+that script can use for crud operations on topic
+need to specify server or zoo
+and also need specify name of topic
+
+bin/kafka-topics.sh --create --bootstrap-server 127.0.0.1:9092 --topic cities
+
+after creation in tmp/kafka-logs create new folder with name of 
+topics
+
+normally for any topic create one partition 
+what is partition.
+where messages spread inside a topic
+
+to see list of topics
+bin/kafka-topics.sh --list --zookeeper 127.0.0.1:2181
+
+to read config tales about this topic
+bin/kafka-topics.sh --describe --zookeeper 127.0.0.1:2181 cities
+show you ReplicationFactor
+it use when we have 3 server-brocker save every message of topics in
+other brocker and make it 3.
+leader and Replicas and ISr are related to id of broker.
+
+to send message to topic we need to have producer.
+
+what is producer?
+bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic cities
+after that we are ready to send messages
+
+ok. but where those messages received by kafka?
+where kafka store messages?
+how we consume it?
+
+consumer
+it need server whitelist or topic 
+with whitelist you can connect to set of topics.
+
+bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic cities
+
+consume messges from beginning.
+bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic cities --from-beginning
+
+run mutliple consumer
+do it in new window.
+
+run mulitple producer
+do it in new window.
+
+cosumers and producers dont know about each others.
+
+when they save?
+cd /tmp/kafka
+now see __consumer_offsetst from 0 to 49
+its new topic that has 50 partitions
+
+default time of message retention is 168 hours.
+
+every consumer belong to specifci consumer group
+
+every message inside of topic has unique number called offest
+first message in topic has offset 0
+consumers start reading messages starting from specific offset.
+
+
+kafka is distributed publish - subscribe messaging system. 
+
+publisher                  subscriber
+producer ----> broker ---> consumer
+ 
+can have multiple producer and multi consumers.
+
+to add more reliablity and accessbility we use multi brocker 
+called cluster.
+
+ 
+but what zookeeper do? 
+it use when we have multiple brokers
+maintain state and how communicate brokers with each others.
+it maintain list of active brokers 
+manage config of the topics and partitions
+elects controller.
+controller is elected broker in cluster.
+when you create topics it basicly create in zookeeper.
+
+but what if zookeeper fail?
+you need maker cluster of zookeepers.
+
+zookeeper cluster == ensemble
+keep odd numbers of ensmeble.
+
+in every zookeeper cluster you should setup quorum.
+
+quorum is minimum quantity of servers should run to make operational
+cluster
+if number of zookeepr < quorum  it means down and after that all 
+brokers go down
+
+ 
+multiple kafkka cluster.
+setup mirroring between different clusters.
+must do mirroring for data sync (each clusted has multi zoo, broker , consumer and producer)
+
+
+now how config ports?
+
+you must create new config 
+and if brokers should be publicly accessbile you need to adjust
+"advertised.listeners" property in broker config.
+
+
+topics :
+its entity. messages store in topics in each borker. topic name
+must always be unique . 
+and every message in topic has specific name called offset it
+is number.
+
+log retention period = 168hrs
+
+
+messge structure
+timestamp
+offset number (unique accros partiion)
+key: (optional) for grouping messages inside topic
+value: bytes.
+
+
+same key item go to same partition.
+
+topics and partitions :
+messages spread among different brokers when same topic is present
+on different brokers for it we have partitions
+
+topic b in 3 brokers has 3 partition.
+
+now how messages spread among different partitions in diffrent broker 
+or one broker?
+
+spreading messages accross partitions.
+
+every partition is seprate folder.
+each partition hold messages index 0 to ... it get offset 0 ,
+offset numbers must be unique accros partition not topic
+
+replicate messages inside every partition.
+
+leaders and followers :
+partition leader and follower
+follower do replication from leader.
+follower dont accept any request from producer their job is take
+messages from leader and write to themselves.
+also they dont serve consumers.
+use at lease 2 replica
+
+need to configuer replication factor on the topic level basics.
+
+Controllers :
+who dicide which broker will be leader for particular partition?
+consider partition 0 have 2 replica in 2 other brokers.  
+we must can locate partitions of failure broker to  new broker
+
+one of the brokers serves as controller which is responsible for
+manages state of partitionbs and replicas
+and for perfomrming administrative tasks like reassignining partitions
+
+zookeeper elect controll broker.
+
+how producer write message ?
+messages with same key will write to same partition.
+but if not it write in all partitions in that topic 
+
+how consumer consume from specific topic?
+from begining or waiting for new.
+
+mulitple consumers that consume messages from different topics
+that belong to conumers group.
+you can read by offest
+
+github.com/bstashchuk/apache-kafka-course
+
+example 1 create topic with several partitions
+
+reading messages from specific partition.
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092
+--partition 1 --topic animal --from-beginning
+
+read message from specific offset in specific partition.
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 
+--partition 2 --topic animal --offset 0
+
+read mmessage from specific offest in all patition.
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 
+--topic animal --offset 1
+
+read detail about topics
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic animal
+
+segment.bytes = 1gb size of every segment for this topic.
+max size of log file.
+
+what is purpose of __consumer_offsets
+it tracks location of every consumer 
+
+multiple broker.
+unique port , unique broker id, unique log directory
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

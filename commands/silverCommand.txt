@@ -1,0 +1,8 @@
+sudo rpm-ostree status
+systemctl restart rpm-ostreed
+sudo rpm-ostree upgrade
+rpm -q rpm-ostree
+
+
+sudo ln -s /var/lib/flatpak/exports/bin/com.visualstudio.code /usr/local/bin/code
+
