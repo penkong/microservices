@@ -1,0 +1,340 @@
+elastic 
+it is document oriented search engine.
+it use inverted index
+basically maps words or numbers to the actual document locations of where
+those exist in documents.
+
+relational world                           elastic world
+	table                                index
+	row                                  document
+	column                               field
+
+vechicles(type is car) (index)
+car(doc1)
+car(doc1)
+car(doc1)
+
+{
+	"type": "car",
+	"documents": [
+		{},
+		{},
+		{},
+		{},
+	]
+}
+
+inserting data into a elastic search === indexing
+
+syntax for indexing :
+
+PUT /{index}/{type}/{id}
+{
+	"field1":"value1",
+	"field2":"value2"
+}
+
+PUT /vehicles/car/123
+{
+  "make": "honda",
+  "color": "black",
+  "hp": "250",
+  "milage": "24000",
+  "price": "19300.97"
+}
+
+types are deprecated we use index as type like vehicles.
+
+every thing with _ in response is a meta field and will be  managad by elstic
+
+
+for retreive data : 
+GET /vehicles/_doc/123
+
+
+if we want to check doc exists :
+HEAD /vehicles/_doc/123/
+
+
+in elastic we dont update specifi field we update whole document
+documents are immutable
+
+
+but if we want update a particular field we use POST method.
+
+POST /vehicles/_update/123/
+{
+  "doc": { 
+    "price": "19300.10012"
+  }
+}
+
+
+update : read from elstic , update that , re index
+
+
+
+for delete : 
+DELETE /vehicles/_doc/123/
+
+after delete document actually exists still . marks as deleted
+and on read elastic don't show you but exist in disk space.
+
+
+PUT /business/_doc/110
+{
+  "address": "57 new Dover In",
+  "floors" : 10,
+  "offices" : 21,
+  "loc": {
+    "lat" : 40.4342345,
+    "lon" : -74.43423
+  }
+}
+
+each index has 3 field : aliasses , mappings , settings.
+
+setttings have info about shards 
+
+mappings : contain structure of fields.
+
+PUT /employees/_doc/330
+{
+  "name": "peyman",
+  "title" : "seniort",
+  "salary_usd" : 1220000,
+  "hire_date" : "Jan 19,2013"
+}
+
+
+
+for search we use :
+GET /{index}/_search
+
+
+term query :
+GET /business/_search 
+{
+  "query": {
+    "term": {
+      "address": "57"
+    }
+  }
+}
+
+match_all query : 
+
+GET /business/_search 
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+BEHIND SCENE WHEN SEND REQUEST or QUERY : 
+each elstic search on the same network communicate with each other
+
+
+shards : are physical place of items.
+
+there are primary shards and replica shards for backup
+
+after making primary it make replica
+
+
+read data must be fast and load balancer make decision to use primary
+or replica.
+
+round robin : go to certain amount of nodes rather than hammering one node
+to find info.
+
+
+index broke to multi shards.
+
+shard is lucence index , a physical place.
+
+search power come from shards
+
+
+shards have multi segments.
+each segment is inverted indicies
+segment is IDX .
+
+each token contains list of doc that exists on.
+
+each segment is setup like bunch of tokens and their lists.
+
+
+shard is container of inverted indicies called segments.
+
+
+
+indexing is slowest process in search engine.
+it need prepare data called analysis .
+
+analysis is process of converting to tokens.
+once inverted index made it send buffer when buffer filled up it commit 
+to a segment.
+
+
+analysis steps :
+
+analyzer(
+tokenziation,filter : {
+	remove stop words : like the and
+	lowercasing
+	stemming (find root swimmers or swimming)
+	synonyms ( thin or skinny )
+})
+
+also analyzer use stps in query time :
+
+also position(offset) will save on inverted text.
+
+
+analyzer do job in specific fields of document.
+
+
+we must define structure for data of docs.
+
+
+
+Elastic search Index :
+
+on create index must define structure of index with mappings and settings.
+
+creation :
+PUT /customers 
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1
+  },
+  "mappings": {}
+}
+
+
+
+
+PUT /customers
+{
+  "mappings": {
+    "properties": {
+      "gender": {
+        "type": "text",
+        "analyzer": "standard"
+      }, 
+      "age": {
+        "type": "integer"
+      }, 
+      "total_spent": {
+        "type": "float"
+      }, 
+      "is_new": {
+        "type": "boolean"
+      }, 
+      "name": {
+        "type": "text",
+        "analyzer": "standard"
+      }, 
+    }
+  },
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 1
+  },
+}
+
+
+
+also we can add up more props on creation but in prod mode
+we better prevent that.
+
+there is settings for this called dynamics
+
+dynamics : false or stric
+false : prevent.
+strict : throw errors.
+
+
+
+
+this route show how analyze things :
+
+POST _analyze
+{
+  "analyzer": "whitespace" or "standard" or "simple"
+  "text" : "the quick the fox."
+}
+
+
+
+simple work for only letters remove others.
+
+
+custom analyzer can also define .
+it sits on settings section analysis analyzer part .
+
+
+
+
+DSL Query : 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
