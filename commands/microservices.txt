@@ -88,6 +88,51 @@ deployment is a k8s object that is intended to manage set of pods.
 in template labels define label for selector.
 
 
+// many thing not saved like 70 lines
+
+
+
+skaffold , 
+
+==============================================
+
+
+the big challenge is managing data :
+
+
+
+
+async , 
+
+
+STUBHUB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
