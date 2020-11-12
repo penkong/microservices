@@ -108,6 +108,101 @@ async ,
 STUBHUB
 
 
+===========================================================
+
+
+k8s cluster = nodes + matster for manage
+
+node = a vm run our containers
+
+pod = almost a running container technically
+
+deployment = monintors set of pods, make sure they are.
+
+service =  provide a easy remmebmer url to access other running container
+
+
+---
+
+k8s config files :
+
+it say to k8s about objects (deployments , pods , services)
+
+in yaml syntax
+
+it is kind of documentation for clusterv
+
+
+create pod
+
+create image 
+define file
+create with kubectl
+kubectl apply -f nameoffile
+
+
+about config :
+
+
+apiVersion : api of object we want use it must contain set of objects
+
+type : type of object from api
+
+metadata : config we want to apply to the object
+
+spec : exact attributes we want our oject have, list of config options  
+
+        containers : we can create many containers in a pod
+                we add array of them here
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,10 +2,13 @@
 apiVersion: v1
 #  type of object
 kind: Pod
-metadata: 
+metadata:
+  # name of pod we call
   name: posts
-spec: 
+
+spec:
   containers:
+    #  name of container we name
     # container name
     - name: posts
-      image: stephengrider/posts:0.0.1
+      image: redis
