@@ -838,7 +838,7 @@ how to connect to db from contianer.
 
 
 
-nginx ---- recat         worker ]
+nginx ---- react         worker ]
       ---- exprress ---- redis  ]
                     ---- postgress
 
@@ -1112,7 +1112,7 @@ mean it is a Service NodePort
 
 browser -< kube-proxy -< Service NodePort -< Pod(port3000 - multi client)
 
-every node hase kube porxy
+every node has kube porxy
 one single window to outside.
 
 
@@ -1379,7 +1379,7 @@ ingress services                                           deployment
                   clusterIP service                         worker
 		     deployment    
 		     server pods       clusterIP service   deployment
-		     					    redis
+		     					                                redis
 
                                         clusterIP serivce  deployment
                                                             postgres
@@ -1508,128 +1508,3 @@ provision how kube going to decide how create pv .
 k8s.io/minikube-hostpath 
  
 kubectl describe storageclass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
