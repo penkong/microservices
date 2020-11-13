@@ -13,4 +13,4 @@ COPY ./ ./
 
 CMD ["npm" , "run" , "start" ]
 
-FROM node:alpine
+

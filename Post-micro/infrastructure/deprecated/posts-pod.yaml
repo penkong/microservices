@@ -11,4 +11,4 @@ spec:
     #  name of container we name
     # container name
     - name: posts
-      image: redis
+      image: stephengrider/posts

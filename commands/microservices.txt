@@ -130,8 +130,8 @@ it say to k8s about objects (deployments , pods , services)
 
 in yaml syntax
 
-it is kind of documentation for clusterv
-
+it is kind of documentation for cluster
+allow others know what are you doing
 
 create pod
 
@@ -146,9 +146,10 @@ about config :
 
 apiVersion : api of object we want use it must contain set of objects
 
-type : type of object from api
+kind : type of object from api
 
-metadata : config we want to apply to the object
+metadata : config we want to apply to the object,
+        options we want apply like name
 
 spec : exact attributes we want our oject have, list of config options  
 
@@ -156,33 +157,189 @@ spec : exact attributes we want our oject have, list of config options
                 we add array of them here
 
 
+run yaml file with  kubectl 
+
+first build image\
+push to hub
+write yaml file for pod/deployment and service
+use kubectl to build pod/deployment and service
+
+kubectl apply -f posts.yaml
+kubectl get pods
+
+docker exec -it ... = k exec -it ...
+
+k logs ... = show log of terminal for microservice
+
+
+deployment is managar for pods
+write yaml file for it.
+
+spec : how deployment must behave
+
+in spec section of deployment
+selector says he k8s look at all pods with created with matchlabels param and 
+watch it for me
+
+when use deployment if we delete pod or any problem , deployment will 
+generate new one
+
+k describe deployment 
+k logs [pod name]
+check event
 
 
 
 
 
 
+for update deployment :
+there are ways for this .
+1 : update image in hub. update image version in yaml.
+    now must inform k8s. k apply -f file.name -> show configured.
+    (not good to change that number each time)
+2 : use latest tag on image or leave it off. update code . build image .
+    push to hub . then use command
+    k rollout restart deployment [depl name]
 
 
 
 
 
 
+now services :
+by services we allow to use our pods (before it is hidden)
+service is object. default type is ClusterIp.
+4 type ClusterIp (expose pods only in cluster) and 
+       loadBalancer(outside w) for daily use
+       nodeport (dev outside w) 
+       externalName (redirect to c name)
 
 
 
 
 
+in spec/selector of serivce we put name of pod we want expose to world
+
+port listen on LVM (also allow access out world).
+targetPort listen on our piece of app.
+
+
+nodePort(browser) -> port(NodePort service) -> targetPort(pod)
+
+[minikubei ip]:[nodePort]/${route}
 
 
 
 
 
+write services in one file
+hint : ClusterIp services exists with NodePort or loadBalancer at same.
+
+hint hint : use k explain pods or services so cool
+
+
+
+
+how communicate between serivces???
+change name of route in axios or what ever to name of
+http://[ClusterIp service name]:[port(other ClusterIp)]/[route you defined]
+(this case is when you have not famous message broker)
+
+
+
+
+loadBalancer service :
+
+cra go in pod.
+in spa case all req come to pods from browser.
+therefore we must only serve static files.
+
+but how cra connect to others
+
+cra --> loadBalancer service ->> it connect to all ClusterIp s
+
+now make sure cra connect to it 
+and make yaml for loadBalancer
 
 
 
 
 
+loadBalancer service : tells k8s to reach out to its provider and provision a 
+        loadBalancer . get traffic to single pod
+        (do it in front with nginx)
+        cluster is in cloud provider we want out world traffic in.
+        make config for it . feed to cluster 
+        it says to our cluster go and reach out to our cloud provider
+        and provision sth called LoadBalancer
+        it exists outside cluster in cloud provider - part of google or aws
+
+
+Ingress or Ingress Controller : a pod with a set of routing rules to distribute traffic
+        to other service.
+        (do it with ingress-srv)
+        it work along side top service and give it rule of routing to choose best
+        pod 
+
+
+
+outside(react browser)-> loadBalancer(cloud)-> cluster(ingress(rule routes)-> srv.pods)
+
+
+
+
+
+we use ingress-nginx (check github) 
+ingress-nginx = create both loadBalancer  +  Ingress
+
+also there is another kubernetes-ingress
+
+go website -> deployment -> installitaion guide
+
+
+run mandatory command (give u yaml)
+for this add  ingress from his website or addons enable minikube
+
+provider specific command (give u yaml)
+for this define yaml
+{
+        kind: Ingress
+}
+
+annotations : help ingress Controller understand we try to feed him some rules 
+so ingress continusly scan objects and try to find someone who has below annotaions
+kubernetes.io/ingress.class: nginx
+
+nginx have some rule for me
+allow us use regex
+
+spec:
+        rules : teach ingress here
+        define host : [posts.com]
+               http
+                 paths
+                   path
+                   backend
+                     serviceName
+                     serivcePort
+
+
+
+
+with k8s and his cluster we can host many sites 
+we trick our machine to conect local host go to posts.com
+edit -> /etc/hosts add [minikube ip] [name of host you want]
+
+
+
+Now CRA :
+change rotue to posts.com
+make yaml file for react
+
+last step :
+add rules to ingress service
+ingress can not do routing base on Method of request
 
 
 

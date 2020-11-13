@@ -1,10 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  #  name of deployment
   name: posts-depl
+  # how deploy must behave
 spec:
   replicas: 1
-  #  selector says he k8s look at all pods with created with matchlabels param and watch it
+  #  selector says he k8s look at all pods with created with matchlabels param and
+  #  watch it for me
   selector:
     matchLabels:
       app: posts
