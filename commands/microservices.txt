@@ -545,3 +545,97 @@ we define subclass of error for any reason.
 created costum handler and use it by middleware
 
 give type to class and error message return 
+
+finally we used abstract class to make error to use
+
+-----------------------------------
+
+Section 8 : database modeling 
+
+install mongoose 
+
+each service has own db
+
+express app => mongoose <=> mongoDb instance with deployment and clusterIP
+
+with skaffold crete it
+
+lifecycle of pods : if we delete pod of mongo db we lose 
+how solve ? we back here 
+
+we register mongoose with start() function style
+
+now model and signup flow 
+questions : 
+
+req
+1 . does user already exists?
+2 . do we hash password when user enter?
+3 . create new user and save to db
+4 . send back jwt token for user logged in
+res
+
+why mongoose and ts have problem with each other???
+because name of collection and docuemnt is same .
+ts don't understand of prop pass to new User({here})
+docuemnt make change must teach ts about it
+
+
+
+create user model
+
+to be sure of info pass to model , 
+creat interface in model
+
+use custom function for build model with ts
+like this userSchema.statics.build
+
+but ts does not understand how attach func to object
+
+there fore need make new interface that desc the prop user model have
+
+new interface extends mongoose.Model and we attach build() to it
+
+
+now must fix second proble of when model create is different from 
+what back from mongo
+
+we do new interface that describe info come back from model 
+
+and put it as first type in model and also response of  build()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
