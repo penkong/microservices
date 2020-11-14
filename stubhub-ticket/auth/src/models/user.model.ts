@@ -2,6 +2,10 @@
 
 import mongoose from 'mongoose'
 
+// ---------------------- Packages ------------------------
+
+import { Password } from '../services'
+
 // --------------------------------------------------------
 
 interface IUserAttrs {
@@ -31,7 +35,17 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-// --------------------------------------------------------
+// -------------------------- Model Logic ------------------------------
+
+userSchema.pre('save', async function (done) {
+  // when this work , on pass change not email change or what ever
+  // also pass creation consider modification
+  if (this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'))
+    this.set('password', hashed)
+  }
+  done()
+})
 
 userSchema.statics.build = (attrs: IUserAttrs) => new User(attrs)
 

@@ -602,14 +602,34 @@ what back from mongo
 
 we do new interface that describe info come back from model 
 
-and put it as first type in model and also response of  build()
+and put it as first type(generic) in model and also response of  build()
+
+generic : functions for types, args for function model
 
 
+now signup process
 
+check with findOne user exist
+define new error for it
 
+hash pass step
+use for signup and signin
+hash password -> produce unique string for that pass
+we do hash stuff in model but because keep things clean
+we do login in seprate class and only consume it there.
+make services folder -> for general purpose things
+when we want save user a lifecycle(middleware) 
+from monog call presave and
+do hashstuff
+and in that middleware you must call done()
 
+we use scrypt from crypto (it is hashing function)
+use promisify with scrypt
+scryptAsync bring us back a buffer
 
-
+create user
+save
+return user (jwt in future)
 
 
 
