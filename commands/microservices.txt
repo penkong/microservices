@@ -469,40 +469,76 @@ write yaml for nginx - define domain
 browsers does not trust ssl from server 
 type anywhere in tab thisisunsafe
 
+-------------------------
+
+SECTION GO TO GOOGLE CLOUD :
+need card
+two way 
+
+1 . by add sync section in skaffold.yaml new config 
+
+2 . now when we change unsynced file --> skaffold got google cloud build 
+    --> upload image to google cloud vm
+
+now go through setup
+
+cloud.google.com/free --> go sign up
+
+create project -> go to project -> kluster engine -> cluster
+create cluster -> setting 
+
+kubectl context to connect to google cloud
+kubectl use context as connection settings
+
+to add context 2 way in gcloud dashobard or use google cloud sdk
+
+sdk -> cloud.google.com/sdk/docs/quickstarts
+
+install 
+
+terminal  -> gcloud
+
+gcloud auth login
+
+init -> gcloud init
+
+choose 
+
+setup context now 
+
+with docker running 
+gcloud container clusters get-credentials <cluster name = ticketing dev>
 
 
+now update skaffold config
+
+enable gcloud build -> tools -> cloud build
+update yaml -> after config -> change image name in deployment also
+setup ingress-nginx on gcloud cluster -> command from website 
+update hosts file to point there -> get loadBalancer ip from google ->
+        network service -> get ip of loadBalancer -> add to /etc/hosts
+restart skaffold
 
 
+---------------------------------------------------
 
+Section 7 : response normalization response
 
+let go for auth proj
 
+define router 
+use them 
+use express-validator to validate and sanitazation body of req
+        add array az middleware validator with body()
 
+import type of req, res
+make route complete
 
+but we need same error response for all of error back from all services
+need similar structure for error
 
+we make middleware for error, use it in app , throw error from router ,
+refine error on middleware 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+we define subclass of error for any reason.
 

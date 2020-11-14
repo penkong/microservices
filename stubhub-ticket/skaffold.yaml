@@ -7,7 +7,10 @@ deploy:
 build:
   local:
     push: false
+  # googleCloudBuild:
+  # projectId: id of project
   artifacts:
+    # change image name  us.gcr.io/[project id]/auth(project directory)
     - image: penkong/stubhub-auth
       context: auth
       docker:

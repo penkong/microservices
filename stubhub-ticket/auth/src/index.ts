@@ -1,13 +1,33 @@
-import express from "express";
-import { json } from "body-parser";
+// ---------------- Packages -------------------------
 
-const app = express();
-app.use(json());
+import express from 'express'
+import { json } from 'body-parser'
 
-app.get("/api/users/currentuser", (req, res) => {
-  res.send("Hi there!");
-});
+// --------------- Local ---------------------------
+
+import { errorHandler } from './middlewares'
+import {
+  currentUserRouter,
+  signinRouter,
+  signoutRouter,
+  signupRouter,
+} from './routes'
+
+// -----------------------------------------------------
+
+const app = express()
+app.use(json())
+
+// -----------------------------------------------------
+
+app.use(currentUserRouter)
+app.use(signinRouter)
+app.use(signoutRouter)
+app.use(signupRouter)
+app.use(errorHandler)
+
+// -----------------------------------------------------
 
 app.listen(3000, () => {
-  console.log("Listening on port 3000!!!!!!!!");
-});
+  console.log('Listening on port 3000!!!!!!!!')
+})
