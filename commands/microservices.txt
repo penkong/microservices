@@ -350,14 +350,124 @@ ingress can not do routing base on Method of request
 
 
 
+To update and change env in dev env we use automate tool
+https://stackshare.io/skaffold/alternatives
+can use helm or other in prod
 
 
 
 
+skaffold :
+automate task in k8s
+you can not use in prod
+
+can change set of objects quickly.
+
+
+create yaml file for it in root of all proj
+
+when stop it delete all objects.
+local/push : false prevent it to push and build image to docker hub
+on each save
+
+artifacts:  array of each image with their config
+        if change is not in manual path , skaffold rebuild image
+        like changes in package.json
 
 
 
+to start
+skaffold dev 
 
+
+must always use to nodemon to make changes.
+
+sometimes detecting not change we fix it in future.
+
+
+----------------------------
+
+NExt Project :
+
+big challenge is data ,
+we use async communication (with message brokers) with events
+with async every service is self sufficient 100%
+we use k8s for scale and deploy
+
+we build npm to share code - central lib for share services
+must define all our events in our library to know what happen
+we also handle concurrency
+
+
+overview of app :
+
+STUBHUB
+
+user collection , tickets collection ,  order collection , charge
+
+
+we have 5 services
+
+auth, tickets , orders , expiration , payments
+
+
+events and architecture :
+userCreated, userUpdated ... OrderCancelled , OrederCreated , ...
+ticketCreated , chargeCreated ...
+
+
+client(nextjs)-->
+common (shared lib) -->
+microservices with mongo , redis -> 
+nats streaming server
+
+----
+
+auth service start 
+
+install dependencies
+
+tsc --init 
+
+create src
+
+index.ts
+
+simple server 
+
+now start k8s infrastructure from start
+
+make docker file
+make docker ignore file
+
+build image
+docker build -t penkong/stubhub-auth .
+
+make infra/k8s folder 
+
+wrtie auth-deployment with ClusterIp service
+
+make skaffold - it read from local
+(deploy section load all yaml file we want
+in sync manual dest: . means where to sync file to inside running container
+get file from src and through it container
+)
+
+start minikube
+
+skaffold dev (if not reload use this in package ts-node-dev --poll src/index.ts)
+
+
+now we want access our service
+now set up ingress-nginx (loadBalancer --> ingress Controller)
+
+
+make it available in minikube or server
+
+
+write yaml for nginx - define domain
+browsers does not trust ssl from server 
+type anywhere in tab thisisunsafe
 
 
 
