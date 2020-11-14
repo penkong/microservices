@@ -542,3 +542,6 @@ refine error on middleware
 
 we define subclass of error for any reason.
 
+created costum handler and use it by middleware
+
+give type to class and error message return 
