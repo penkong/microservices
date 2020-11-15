@@ -1,18 +1,20 @@
 // -------------------------- Pacakges ------------------------
 
 import express, { Request, Response } from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
+import jwt from 'jsonwebtoken'
 
 // -------------------------- Local --------------------------
 
-import { RequestValidationError, BadRequestError } from '../errors'
+import { BadRequestError } from '../errors'
+import { validateRequest } from '../middlewares'
 import { User } from '../models'
 
 // -----------------------------------------------------------
 
 const router = express.Router()
 
-router.get(
+router.post(
   '/api/users/signup',
   [
     body('email').isEmail().withMessage('Email must be valid'),
@@ -21,13 +23,8 @@ router.get(
       .isLength({ min: 4, max: 20 })
       .withMessage('must be between 4 and 20')
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array())
-    }
-
     const { email, password } = req.body
 
     const existingUser = await User.findOne({ email })
@@ -36,10 +33,21 @@ router.get(
       throw new BadRequestError('user already exist!')
     }
 
-    // we will hash
-
     const user = User.build({ email, password })
+    // we will hash  password on pre save middleware on model
     await user.save()
+
+    // generate jwt and store it on req.session
+    const userJwt = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_KEY!
+    )
+
+    // set it on cookie header
+    req.session = {
+      jwt: userJwt
+    }
+
     res.status(201).send(user)
   }
 )

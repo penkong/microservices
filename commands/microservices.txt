@@ -632,6 +632,291 @@ save
 return user (jwt in future)
 
 
+------------------------------------------------
+
+Section 9 : authentication 
+
+this is so challenging part
+
+there are many approaches 
+
+main question : is this person logged in???
+
+option 1 : 
+sync requetst to auth serivce (centralize auth service)
+but if auth service go down ???  - down side 
+
+
+
+options 1.1 : 
+every request go through single gateway that would authenticate
+the incoming request -> then go to relate service
+but if auth service go down ??? - down side
+
+
+options 2 :
+teach each individual serivce how to authenticate a user
+each contain logic to inspect jwt/cookie and decide 
+no dependency to out service 
+duplicate logic of auth - down side  -> use share library
+more down side : if other serivce make user invalid how other know?
+
+
+we go with option 2 because we want independet services
+
+
+let's do it :
+
+make cookie for 15 minutes
+
+if token is old( 30 min ) -> from logic inside service -> goto auth service
+--> it give us refresh token 
+
+or after (15 min) we say to user go to auth service and get new token
+
+if we want ban user -> send event to ban user 
+
+
+
+reminder cookie and jwt :
+header 
+        Set-Cookie : value  -> auto store to browser 
+        browser send it with 
+        request in 
+header 
+        Cookie : value
+
+
+payload --> jwt algorithm --> jwt
+
+we can put jwt on -> request header with Authorization 
+                             body token
+                             header Cookie
+
+
+cookies are transport mechanism , move any kind of data , auto manage
+        by browers
+
+JWT auth/authorization mechanism , store any data we want , 
+        we have to manage it manually 
+
+
+our system need after authentication , send us info about user accesses
+or buy power or ... , roles , accesses , expiration , diff language
+
+
+on request we verify user authentication 
+
+we use nextjs - ssr 
+nextjs go to get info to generate ssr info therefore all auth 
+do in server 
+we need to know auth info from first reques because next do things
+on server base on info came from server 
+
+therefore we can not intercept request to attach Authorization to header
+or there is not any body request
+
+
+
+
+browser must send -------    jwt on Headers with Cookie
+(service worker can work here)
+
+
+we use cookie-session because let us store info in cookie by itself     
+
+
+we want be sure content of cookie understand by differenet languages
+and cookie-session use crypto 
+what we do?
+we not encrypt cookie
+
+add cookie-session and types 
+
+use it with options 
+
+change setting on express itself
+
+app.set('trust proxy' , true);
+
+because traffic is proxied to our app through ingress-nginx
+and express i dont like it . express let it happen
+
+
+now everything ok , we must generate jwt and set it to cookie 
+consider cookie-session do all other things
+
+we store some info inside cookie by 
+req.session
+it is object created by cookie session 
+
+
+npm i jsonwebtoken
+
+by jwt.sign() we create > jwt
+arg 1 : payload -> info we want store in jwt
+arg 2 : signkey -> our secret
+
+
+by jwe.verify() we become sure nobody change jwt
+also use draw out payload
+
+
+after save user to db we generate jwt with sign
+hint : must save secret to k8s guys
+
+
+then set it on req.session 
+
+it save on base64 encoded
+first decode base on 64
+and after that you will see jwt
+
+it have payload inside it , 
+
+
+now sign key : 
+now when we recive that jwt inside another service we need jwt sign
+key -> but it bad because other can change -> but we must exchange it
+it profession way
+
+storing secrets with k8s
+
+it have feature for it
+
+
+
+
+we create new type of object inside cluster
+object secret
+when we create it we can use it inside node / pods as env var
+
+
+
+create secret
+kubectl create secret generic jwt-secret --from-literal=jwt={'hree'}
+                          name of secretobj      assign key=value
+generic is kind of secret , there are kinds for it
+also secret like access image in docker repo
+
+
+k get secrets
+
+
+now must store in inside pod as env -> deployment
+
+in containers -> add env / name : name of var as it show inside container
+JWT_KEY
+
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=123456asdf
+       -name: JWT_KEY
+        valueFrom:
+          secretKeyRef:
+            name: jwt-secret
+            key: JWT_KEY
+
+
+
+now want access it from code :
+process.env.JWT_KEY!
+
+
+to keep gaurd exist of env we must do it on init
+on start 
+if (!process.env.JWT_KEY) throw new Error('JWT_KEY MUST BE DEFINE')
+
+
+
+
+
+now we must common response props 
+like errors :
+
+we do it in model with projection like 
+
+on schema / second arg / toJSON : { transform(doc, ret) {}}
+check code
+
+
+
+NOW SIGN IN ROUTE :
+steps like sign up at first
+
+
+draw out validation stuff and make it middleware
+base on args on middleware express understand type of middleware
+when it is 4 it get it is error middleware
+
+we now dont capture error (like error handler middleware) 
+we produce error here
+
+this validateRequest use over almsot every put and post request
+
+check exist of user
+if exist
+compare password
+if ok
+generate jwt
+and ...
+
+
+current user :
+react can not look at cookie
+can not be access 
+therefore we must somehow provide
+
+if no cookie -> send current user null
+
+check valid cookie token
+
+if exist -> send current user from verify cookie
+jwt.verify()
+because it throw error we must use trycatch
+
+
+we will add authorization stuff as middleware in near future
+
+
+signout : 
+req.session = null
+
+
+
+now we need currentUser middleware :
+when request come to other services
+we want to know user is logged in or not or exist
+
+and we add currentUser to request 
+that let that service consume info of user from req
+and dont need use jwt to decode 
+decode and verify in middleware
+register info on req -> service consume it
+
+hint :
+!req.session || !req.session.jwt == !req.session?.jwt
+
+
+to add prop to exist object (req.currentUser)
+
+we want augment it 
+// to add new prop to it
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser?: IUserPayload
+    }
+  }
+}
+
+
+
+second middleware reject if not user.
+
+
+
+
+
+
 
 
 
