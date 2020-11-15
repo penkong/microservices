@@ -911,6 +911,94 @@ declare global {
 
 
 second middleware reject if not user.
+only check req.currentUser if not extist throw error
+
+
+
+-------------------------------------------------
+
+Section 10 : testing isolated microservice
+what our test scope???
+
+test a single code in isole like middleware(unit test) 
+
+or
+
+test how different piece of code work like req flow throuh middleware and
+handler 
+
+or 
+
+test how differenet component work like request to service ensure write
+to database or eventbus  
+
+or
+
+test how differenet service work like create a payment that have impact
+on multi microservice ----> not now - not here
+
+
+we do test microservice in isolation
+
+
+test goal :
+
+1. basic request handling -> test whole microservice *****
+
+2. some test around model -> unit test like -> like test model
+
+3. event emitting and receiveing -> send and receive evetns ->
+it is like simulating service works together.
+
+
+HOW WE EXEC TEST AT ALL ???
+for now with npm run  but we go through more complex
+
+
+
+
+TESTING ARCHITECTURE :
+
+we implemet testing goal 1 
+
+jest - test runner lib
+
+steps:
+start in momory copy of mongo
+start express
+use supertest lib to make fake request --> need some refactor
+  we must have access to express app 
+  we need to it , 
+  but there are a lot of stuff there
+  and also maybe port is in use by another (jest run concurrently)
+  supertest if it not listen -> goto ephemeral port (random available)
+  therefore we must not listen on 3000
+  and split index to 2 file
+  app.js -> express app not listen on any port
+  export to test(ephemeral) and also to index.js(3000)
+run assertion to make sure things right
+
+
+
+do refacotr ot app.ts and index.ts
+
+
+also we use mongodb-memory-server 
+it allow us to run multiple mongo at same time
+
+it is huge to prevent from dl on docker image add to 
+npm install --only=prod
+
+
+
+
+
+
+
+
+
+
+
 
 
 

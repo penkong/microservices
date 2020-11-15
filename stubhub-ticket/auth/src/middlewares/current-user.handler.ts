@@ -36,8 +36,6 @@ export const currentUser = (
     ) as IUserPayload
 
     req.currentUser = payload
-  } catch (error) {
-  } finally {
-    next()
-  }
+  } catch (error) {}
+  next()
 }
