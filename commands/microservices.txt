@@ -990,6 +990,132 @@ it is huge to prevent from dl on docker image add to
 npm install --only=prod
 
 
+now add script 
+test": "jest --watchAll --no-cache",
+no-cache because of typescrpt
+
+add "jest" field to packge.json
+
+setup files after env , by this we tell jest run setup files after we initially 
+start our test
+
+add setup related stuff for mongo and other stuff
+
+
+create mongo memory server allow us run differenet suites test at same time
+let us direct access to 
+get uri
+pass to mongoose 
+
+now before each test we reach to mongo and delete all data related
+
+after all test done we stop server and close connections
+
+
+NOW TEST :
+
+for each folder in your service make __test__ folder for let jest know
+
+signup .test.ts
+
+use
+supertest to make fake request to exprss app
+request use chain syntax
+
+npm run test
+
+but we got error because in our test we dont have access to env vars
+
+add to setup   process.env.JWT_KEY = '123456asdf'
+
+ts maybe have problem with jest just restart it.
+
+not test with wrong input
+
+hit enter to run test
+
+can write 2 seprate requetst insdie test with await request
+does not matter you must either do await or return request
+
+
+unique test email
+
+inspect header has cookie set 
+res of signup has get method that have access to header
+but test failed 
+because cookieSession share cookie if request come from https
+
+but supertest do http
+when jest run make NODE_ENV to test
+secure: process.env.NODE_ENV !== 'test'
+
+we can continue many test
+
+
+signin test suites :
+normal test
+
+
+signout also test suite 
+
+currentUser test suite 
+test env like browser and postman have not ability to send cookie with request
+therefore currentUser is null , how fix it???
+
+
+two way easy and refacotr way
+
+get cookie from signup attach it to currentUser
+get it 
+include next request with chain .set('Cookie', authResponse)
+res.body.currentUser.email
+
+but because it is repetetive
+we use signup as helper function
+
+
+write it in setup.ts as global function attached to all test
+
+
+test for model and event handling will come in future.
+
+
+--------------------------------------------------------
+
+
+SECTION 11 : intergrate react ssr with nextjs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

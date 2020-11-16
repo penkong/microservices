@@ -26,7 +26,7 @@ app.use(
     // prevent auto encrypt data we want other use info
     signed: false,
     // https only
-    secure: true
+    secure: process.env.NODE_ENV !== 'test'
   })
 )
 
