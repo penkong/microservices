@@ -1107,6 +1107,136 @@ add ingress config
 add skaffold config
 
 
+add next.config.js to handle update page on change 
+next auto read this file 
+we say poll all data in project every 300ms  
+
+we use bootstrap
+import from dist 
+
+create _app
+
+destructure Component and pageProps 
+what are these??
+
+on next when you navigate to distinct page , next import from page files
+then next wrap it up in own his custom component 
+refered as app
+we define app and law each page will have
+
+Component is page component 
+pageProps are set of components we are intended to pass to each page 
+
+items we want in each page will be here
+
+npm i bootstrap
+
+
+signup form :
+in pages
+build folder auth
+add signup.js page in it
+make form 
+
+form submit -> k8s (nginx -> ingress -> clusterip -> microservice)
+
+after submit go to devtools / network / xhr / signup > see cookie
+
+
+add error handling and ... 
+
+make custom hook for request
+
+
+state of page in ssr :
+browser -> server(nextjs -> currentUser route ) if ok -> render html with appropraite
+info
+
+
+
+challenge : how make request while application is being built???
+steps :
+
+next inspect url and ready set of comps
+
+call those with ```getInitialPros``` (called on server) static -> return of it go 
+as props on landing page
+
+render each comp with those
+
+produce html and send it back
+
+
+
+
+
+
+
+
+
+fetch data during ssr :
+hooks like useRequest work inside components 
+
+because axios with getInitialProps go to server and inside there call 
+axios auto attach info of url as base url and inside server there is no url 
+that is nginx world
+node http layer attach address of machine to request 
+
+
+solution : 
+consider follow up request must have cookie inside getInitialPros
+config axios baseURL
+
+browser -> nginx -> nextjs pod -> nginx -> auth pod
+
+sync request to clusterIP work on same namespace 
+pods are on default namespace
+but 
+ingress-nginx has own namespace
+
+
+
+namespace is like sandbox - to orignize different objects
+k get namespace
+
+
+
+we must do cross namespace communication
+http://nameofservice.namespace.svc.cluster.local
+
+to get active services in namespace
+k get services -n <namespace name>
+
+in my system ingress live on kube-system namespace
+
+http://ingress-nginx-controller-admission.kube-system.svc.cluster.local
+
+now must pass cookie with it.
+
+we use external namespace services
+
+it map name of domain correctly
+
+
+
+how we  find out request is on browser or server???
+
+if we navigate from one page to another page after init load 
+getInitialProps will call from client side
+
+typeof window === 'udefined'
+use top link 
+otherwise use normal
+
+kubectl get svc --all-namespaces
+kubectl get pods --all-namespaces 
+
+
+
+
+
+
+
 
 
 
