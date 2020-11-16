@@ -1085,20 +1085,26 @@ test for model and event handling will come in future.
 
 SECTION 11 : intergrate react ssr with nextjs
 
+we build auth section of react app in this field
 
 
+we do stuff on server
 
+browser requets to => nextjs server => goto take data => 
 
+i react react-dom next`
 
+dev : next
+ 
+add files you need 
 
+add docker file
 
+add kuberfile you need
 
+add ingress config
 
-
-
-
-
-
+add skaffold config
 
 
 
