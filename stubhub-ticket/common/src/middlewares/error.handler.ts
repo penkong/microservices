@@ -1,10 +1,10 @@
 // ----------------- Packages -------------------------
 
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from "express";
 
 // ----------------- Local -------------------------
 
-import { CustomError } from '../errors/'
+import { CustomError } from "../errors";
 
 // ----------------------------------------------------
 
@@ -15,7 +15,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof CustomError)
-    return res.status(err.statusCode).send({ errors: err.serializeError() })
+    return res.status(err.statusCode).send({ errors: err.serializeError() });
 
-  res.status(400).send({ errors: [{ message: 'Something wen wrong' }] })
-}
+  res.status(400).send({ errors: [{ message: "Something wen wrong" }] });
+};
