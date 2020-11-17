@@ -1390,9 +1390,19 @@ pub it
 use it in auth
 
 
+for republish 
+
+after that 
+npm update @baneeem/common
 
 
+to check version on pod
 
+k exec -it [pod name] sh
+goto node_modules
+cd @your package 
+cd common
+cat pacakge.json
 
 
 
