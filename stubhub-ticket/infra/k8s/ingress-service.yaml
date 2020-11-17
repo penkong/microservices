@@ -1,3 +1,4 @@
+# kubectl describe ingress
 # apiVersion: extensions/v1beta1
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -9,6 +10,9 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
     # nginx.ingress.kubernetes.io/ssl-redirect: 'false'
 spec:
+  # defaultBackend:
+  #   resource:
+  #     apiGroup: ticketing.dev
   rules:
     - host: ticketing.dev
       http:
@@ -16,7 +20,7 @@ spec:
           - path: /api/users/?(.*)
             backend:
               serviceName: auth-service
-              servicePort: 3001
+              servicePort: 3000
           - path: /?(.*)
             backend:
               serviceName: client-service

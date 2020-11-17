@@ -23,9 +23,9 @@ const start = async () => {
     })
     console.log('connected to auth-db')
   } catch (error) {
-    console.log(error)
+    console.log(error, 'herrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
   }
-  app.listen(3001, () => {
+  app.listen(3000, () => {
     console.log('auth-service listening on port 3000!!!!!!!!')
   })
 }

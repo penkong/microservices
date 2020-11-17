@@ -1233,28 +1233,59 @@ kubectl get pods --all-namespaces
 
 
 
+we have error with kube-system set 
 
 
+when we have not access to browser on getInitialProps , we have ctx object
+it have req , we send req with request to let us have cookie 
+with it 
+
+cookie is on req.heasers
 
 
+through improvemnt
+
+we must  extract logic
+
+the logic of typeof window , we will do there with
+axios.create({config})
 
 
+devtools > application > cookies > domain cookie
 
 
+make sign in page like sign up
 
 
+reuse header :
+we centralize get currentuser in _app 
+
+but we have challenge
+
+but _app is not page in each
+page -> context == {req, res}
+_app -> context == AppTree Component rotuer ctx:{req,res}
+Object.keys(appContext)
+
+when we use getInitialProps on _app no more getInitialProps on other pages
+will call (not invoke on rest pages )
+how fix it???
+
+in appContext > Component > getInitialProps we have access to getInitialProps
+of current page we on it
+
+then we invoke it and make sure pass context to it
+appContext.Component.getInitialProps(appContext.ctx)
+
+now maybe on some pages we dont define getInitialProps therefore we must
+handle undefined case with if check
+
+now return { pageProps and data we fetched on _app }
 
 
+do header and .. 
 
-
-
-
-
-
-
-
-
-
+signout :
 
 
 
