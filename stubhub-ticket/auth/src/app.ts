@@ -7,8 +7,7 @@ import cookieSession from 'cookie-session'
 
 // --------------- Local ---------------------------
 
-import { errorHandler } from './middlewares'
-import { NotFoundError } from './errors'
+import { errorHandler, NotFoundError } from '@baneeem/common'
 import {
   currentUserRouter,
   signinRouter,

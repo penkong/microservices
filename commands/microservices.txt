@@ -1287,18 +1287,107 @@ do header and ..
 
 signout :
 
+make a page 
+
+
+-----------------------------------------------------------------
 
 
 
+SECTION 12 : CODE sharing
+
+
+ticket service : crud ticket
+
+need auth to create or edit ticket
+
+need middleware to check auth , 
+
+we share error system , auth middleware and request validation middleware
+
+---
+
+now How build share libray???
+
+there are method for sharing :
+1. copy paste
+2. use git submodule = add a git repo to current one
+        auth repo , ticket repo , common repo
+3. publish npm package __>>> we do this
+
+
+---
+
+package security : 
+
+can publish as private 
+or 
+public registery > inside our orignization
+
+public orignization and private orignization
+
+
+create orignization 
+
+make common 
+make package correct
+make git for it
+commit 
+npm login
+npm publish --access public
+
+
+we need type definition 
+write as ts -> publish as js
+
+we use some dependencies to help us
+
+tsc --init
+i del-cli typescrpt
+
+make src/index.ts
+write code 
+add script 
+config tsconfig
+
+un comment 
+declration : it make sure when we build it make type definition
+
+now build
+
+use del-cli to clean last code
+
+make main correct in package
+also add 
+"types": "./build/index.d.ts",
+to package json
+
+add files 
+it say to npm what files we want to publish
+
+add .gitignore
+
+commit 
+
+npm version patch --> update minor version
+npm run build 
+npm publish
+
+
+automate these process (not real world maybe)
 
 
 
+move error and middleware in common
 
 
+export * from source 
 
+add dependencies
 
+pub it 
 
-
+use it in auth
 
 
 

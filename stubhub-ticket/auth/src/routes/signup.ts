@@ -3,11 +3,10 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
+import { BadRequestError, validateRequest } from '@baneeem/common'
 
 // -------------------------- Local --------------------------
 
-import { BadRequestError } from '../errors'
-import { validateRequest } from '../middlewares'
 import { User } from '../models'
 
 // -----------------------------------------------------------

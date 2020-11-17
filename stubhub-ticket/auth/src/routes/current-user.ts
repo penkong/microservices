@@ -1,10 +1,9 @@
 // -------------------------- Pacakges ------------------------
 
 import express, { Request, Response } from 'express'
+import { currentUser } from '@baneeem/common'
 
 // -------------------------- Local --------------------------
-
-import { currentUser } from '../middlewares'
 
 // -----------------------------------------------------------
 

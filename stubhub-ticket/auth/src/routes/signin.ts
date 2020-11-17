@@ -1,13 +1,12 @@
 // -------------------------- Pacakges ------------------------
 
 import express, { Request, Response } from 'express'
+import { BadRequestError, validateRequest } from '@baneeem/common'
 import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
 // -------------------------- Local --------------------------
 
-import { BadRequestError } from '../errors'
-import { validateRequest } from '../middlewares'
 import { Password } from '../services'
 import { User } from '../models'
 
