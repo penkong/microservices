@@ -19,6 +19,14 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
+    - image: penkong/stubhub-tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: penkong/stubhub-client
       context: client
       docker:

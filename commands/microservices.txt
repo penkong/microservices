@@ -1404,11 +1404,25 @@ cd @your package
 cd common
 cat pacakge.json
 
+-----------------------------------------------------
+
+SECTION 13 : crud ticket server
+
+copy past test app and index from auth 
+add dependencies 
+build image 
+make ticket deployment
+make scaffold 
+make ingoress
 
 
+---
 
+we need fix our way of connection to mongo 
+in each microservice
 
-
+add as env to yaml file 
+and consume it in index.ts of tickets or wherever
 
 
 

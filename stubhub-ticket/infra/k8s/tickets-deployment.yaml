@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: tickets-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers:
-        - name: auth
-          image: penkong/stubhub-auth
+        - name: tickets
+          image: penkong/stubhub-tickets
           env:
             - name: JWT_KEY
               valueFrom:
@@ -22,18 +22,18 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-service:27017/auth'
+              value: 'mongodb://tickets-mongo-service:27017/tickets'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: tickets-service
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000
