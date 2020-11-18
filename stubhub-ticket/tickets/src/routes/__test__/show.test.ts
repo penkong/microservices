@@ -1,6 +1,7 @@
 // ------------------------ Packages --------------------------
 
 import request from 'supertest'
+import mongoose from 'mongoose'
 
 // ------------------------ Local --------------------------
 
@@ -9,8 +10,8 @@ import { app } from '../../app'
 // ---------------------------------------------------------
 
 it('returns a 404 if ticket not found', async () => {
-  await request(app).get('/api/tickets/435t34gfwfs').send().expect(404)
-  // console.log(res.body)
+  const id = new mongoose.Types.ObjectId().toHexString()
+  await request(app).get(`/api/tickets/${id}`).send().expect(404)
 })
 
 it('returns a ticket if ticket found', async () => {

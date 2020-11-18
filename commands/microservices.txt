@@ -1482,7 +1482,10 @@ aha id must cast ot _id , therefore it is bad request not not found.
 
 but we must handle unknown error -> need udate common error
 
+now generate correct type of id for test get :id
+const id = new mongoose.Types.ObjectId().toHexString()
 
+write other test routine check code to understand
 
 
 

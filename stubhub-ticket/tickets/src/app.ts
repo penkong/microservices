@@ -8,7 +8,12 @@ import { errorHandler, NotFoundError, currentUser } from '@baneeem/common'
 
 // --------------- Local ---------------------------
 
-import { createTicketRouter, showTicketRouter } from './routes'
+import {
+  createTicketRouter,
+  showTicketRouter,
+  AllTicketRouter,
+  updateTicketRouter
+} from './routes'
 
 // -----------------------------------------------------
 
@@ -29,6 +34,8 @@ app.use(currentUser)
 
 app.use(createTicketRouter)
 app.use(showTicketRouter)
+app.use(AllTicketRouter)
+app.use(updateTicketRouter)
 app.all('*', async () => {
   throw new NotFoundError()
 })
