@@ -4,10 +4,11 @@ import express from 'express'
 import 'express-async-errors'
 import { json } from 'body-parser'
 import cookieSession from 'cookie-session'
+import { errorHandler, NotFoundError, currentUser } from '@baneeem/common'
 
 // --------------- Local ---------------------------
 
-import { errorHandler, NotFoundError } from '@baneeem/common'
+import { createTicketRouter, showTicketRouter } from './routes'
 
 // -----------------------------------------------------
 
@@ -18,13 +19,16 @@ app.use(
   cookieSession({
     // prevent auto encrypt data we want other use info
     signed: false,
-    // https only
+    // https only other test
     secure: process.env.NODE_ENV !== 'test'
   })
 )
+app.use(currentUser)
 
 // -----------------------------------------------------
 
+app.use(createTicketRouter)
+app.use(showTicketRouter)
 app.all('*', async () => {
   throw new NotFoundError()
 })

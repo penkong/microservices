@@ -1421,8 +1421,69 @@ make ingoress
 we need fix our way of connection to mongo 
 in each microservice
 
-add as env to yaml file 
+add uri as env to yaml file 
 and consume it in index.ts of tickets or wherever
+in real world make it secret
+
+
+
+--- 
+
+now crud test for tickets 
+
+go tdd for each routes
+
+
+
+now need fake authentication for other service test
+
+fabricate a cookie
+with steps in code 
+// build a jwt payload . { id, email }
+// create jwt with key in test env 
+// build session  { jwt: 'our jwt decoded from base 64' }
+// session to json
+// encode json
+// return a cookie set
+
+
+remmebmer : supertest want cookie return in an array
+
+
+write tests with set('cookie', global.fnc())
+
+
+after that go for createTicketRouter creation
+
+
+express validator check set error on request if exist 
+
+now for test that we want to know is sth written to db or not???
+
+need to make model ,
+reminder , interfaces , doc describe props a saved record has
+and model describe all props a model has (like attached function)
+
+ret : is object that return to json .
+
+
+after ticket model creation go to test for make test with creation on db.
+
+then write logic for route 
+
+next show with id tests
+
+and write logic 
+
+but we have kind of error that not provided by customError 
+change code in node_modules to handle that
+
+aha id must cast ot _id , therefore it is bad request not not found.
+
+but we must handle unknown error -> need udate common error
+
+
+
 
 
 
