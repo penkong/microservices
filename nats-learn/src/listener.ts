@@ -1,11 +1,14 @@
-import nats, { Message } from 'node-nats-streaming'
+import nats from 'node-nats-streaming'
 import { randomBytes } from 'crypto'
+import { TicketCreatedListener } from './events/ticket-created-listener'
+
 console.clear()
 
 const stan = nats.connect('ticketing', randomBytes(4).toString('hex'), {
   url: 'http://localhost:4222'
 })
 
+//
 stan.on('connect', () => {
   console.log('litener conected to nats')
 
@@ -14,28 +17,7 @@ stan.on('connect', () => {
     process.exit()
   })
 
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName('oreder-service')
-
-  const subsc = stan.subscribe(
-    'ticket:created',
-    'order-service-queue-group',
-    options
-  )
-
-  subsc.on('message', (msg: Message) => {
-    // console.log(msg)
-    console.log(msg.getSequence())
-
-    const data = msg.getData()
-    if (typeof data === 'string') {
-      console.log(JSON.parse(data))
-    }
-    msg.ack()
-  })
+  new TicketCreatedListener(stan).listen()
 })
 
 process.on('SIGINT', () => stan.close())

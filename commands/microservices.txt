@@ -1765,6 +1765,113 @@ history .
 SECTION 15 : nats with nodejs 
 
 
+move it to common module
+
+it is abstract class 
+we are going to create class call listener with props and fields below 
+subject , onMessage , client , queue gropup name, ackwait , subscriptionOptions 
+listen , parsemessage .
+
+
+
+
+we join queue group with other services
+
+
+
+on sample project still ,
+
+make abstract class out of litener logic and let us all other service extend it 
+it finally become an npm moduele
+
+refactor code .
+
+
+
+
+
+now use typescrpt and generic class to make our inherited class 
+of base listener impelemnt a specific type of interface
+
+
+subject enum 
+make business related interface coupled with enum
+
+
+now goto base listener and define Event interface 
+
+and use it to make listener a generic class
+
+
+make publisher base class to same steps
+
+make it accept async / await 
+
+
+
+now how test those ????
+listener need handle it.
+
+
+alternatives to define type in common module is JSON schema , protobuf
+apache avro
+
+now we must draw out some code for common npm 
+
+build and publish that npm 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
