@@ -33,8 +33,8 @@ router.put(
     const { id } = req.params
 
     const ticket = await Ticket.findById(id)
-    if (!ticket) throw new NotFoundError()
 
+    if (!ticket) throw new NotFoundError()
     if (ticket.userId !== req.currentUser!.id) throw new NotAuthorizedError()
 
     ticket.set({

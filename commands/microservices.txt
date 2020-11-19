@@ -1488,6 +1488,311 @@ const id = new mongoose.Types.ObjectId().toHexString()
 write other test routine check code to understand
 
 
+---------------------------------------------------------------
+
+SECTION 14 : NATS streaming server
+
+to share events 
+docs.nats.io 
+
+nats and nats streaming server are different.
+nats ==> nats streaming server 
+
+it have his own design decisions that heavily affect us.
+
+use official docker > read doc
+
+command line are important to set .
+
+
+make nats - deployment
+
+add command line options in spec > containers section to yaml of pod 
+
+args: [args to provide to primary command that exec when pod run]
+args: ['-key', 'value', 'key', 'value']
+
+it service also has difference
+in ports and client and monitoring ports also
+
+run it with skaffold
+
+
+
+
+
+overview of nats :
+
+before we used express and axios for events 
+now we use a client library named node-nats-streaming
+
+
+we do standalone project to understand mechanics of NATS
+
+
+service(nats-event-streaming) ---> server ---> service(nats-event)
+
+
+nats s requires us to subscribe to channels. events emitted to specific
+channels / topics
+
+publish to that channel and if anybody listen to this will get it.
+
+
+
+events store in memory by default also we can add mysql or pgsql 
+ 
+
+
+
+
+
+sub projcet :
+
+npm init 
+install dependencies
+make publisher
+make listener 
+make scripts
+
+implementation :
+by use of  nats create client(or stan) to send events 
+
+
+
+
+now we want connect publisher program to our cluster
+publisher <> ingress-nginx <> nats cluster ip <> nats pod
+
+or 
+
+publisher <> nodeport <> nats pod
+
+or 
+
+set port forward inside kluster to go to pods
+k get pods 
+get nats pod name 
+copy 
+k port-forward [name of nats pod] <local port>:<nats port on cluster>
+npm run publish
+we are connected 
+
+
+---
+
+subject is name of channel we want share data there
+
+also in listener we inform it from subject he can listen to 
+we listen on subscription
+
+
+nats.connect('ticketing', clientID : '123', {
+  url: 'http://localhost:4222'
+})
+
+change data to json before send
+stan.publish
+stan.publish('ticket:created', data || message || event , () => {
+  cb that let us know event published 
+})
+
+
+hint : console.clear()
+
+on listener create subscription
+listen on message
+
+
+import Message interface to help us know inside msg of listener
+getSequence : return number of events from number one 
+getData : return data assosiceted to msg
+
+
+we have on publihser and listener 
+now consider we have more order microservice
+we want scale up (vertically cpu ... , horizantally nodes)
+
+
+now if we connect another listener we get error , clientId  registered
+client id was 123 , and its already registered
+
+
+
+
+
+server maintains list of clients and channels 
+we use random name for client that listen to in code 
+in k8s world handle it is easy
+
+
+
+
+Queue Group :
+now when we publish two pods react and consume and do stuff 
+it bad because we do 2 time logic in for ex db or anywhere else
+
+we dont want every event to in every copy of a service
+
+
+we use queue group inside a channel
+we can have multiple queue group associated with one channel
+we give it name 
+now every instance of order service create subscription to that queue and joins
+now event come nats look at all queue we have and then randomly send event to one
+of the services inside on queue
+
+the service that not registered to any group recieve all 
+
+
+
+how set up?
+on listener when create subscription second arg 
+ 
+
+ack mode :
+we define options for listener subscription
+it is chain of methods
+and 
+put it as 3th arg in subscription
+
+now maybe in process in one of subscription we lose db or server down or data invalid
+and event lose
+this is default behavior
+but we want to process it second time if for any reason it fucked up
+setManualAckMode(true)
+now after complete we ack message
+if not after 30 it send it again
+msg.ack()
+
+
+
+client health check :
+
+now if we reload listener and in mean while send event 
+that does not appear after after 30 s re broadcast
+
+monintor port 8222
+expose thsese port on local
+k port-forward nats-deployment-86bb8f68d4-nm5wf 8222:8222
+http://localhost:8222/streaming
+
+http://localhost:8222/streaming/clientsz
+it show all clients publisher and listener
+
+http://localhost:8222/streaming/channelsz?subs=1
+it show more info about channelsz
+
+nats wait to service back for 30 s and after that send message to other up service
+but it not good idea for us
+we do 2 things
+
+1. in args of deployment
+hbi , is heartbeat - how often health check 
+hbt , how long each client has to respond
+hbf , number of fails can each client can have before nats consider it failed
+
+2. gracefully shutdown 
+by code 
+we inform nats from problem and inform him dont send message
+stan.on('close', () => {
+        console.log('nats closed')
+        process.exit()
+})
+
+process.on('SIGINT', () => stan.close())
+process.on('SIGTERM', () => stan.close())
+SIGINT : interupt signals
+SIGTERM : terminate signals
+on windows it not work or force kill process
+
+
+
+with all of these it can cause events come outside of order
+
+
+
+
+
+
+
+
+
+
+
+
+Core concurrency issue :
+not ordered message go to different microservices
+
+if any event fail it is catastrophic event for business
+
+
+solution bad 1 : run copy of each service -> but not work also cause process bottleneck
+solution bad 2 : write code for handle it.
+...
+
+
+solution :
+
+this is system design > should redesign service
+use transactional database to record and after that dispatch events
+
+that version ing pattern help us to prevent this
+mongo has versioning stuff built in .
+
+
+
+
+event redelivery :
+what about losted event when a service is off or whatever
+we have event history 
+but deliver all is not correct way because maybe we are in scale process
+
+we use a durable subscribe option
+.setDurableName('oreder-service')
+
+nats have list off all durable subscription we have
+when it ack()
+nats store it 
+and when that come up it send unprocessed events.
+
+if we dont use queue gropup on subscription on server down nats remove durable 
+history .
+
+
+--------------------------------------------------------------
+
+SECTION 15 : nats with nodejs 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
