@@ -1821,7 +1821,7 @@ now we must draw out some code for common npm
 build and publish that npm 
 
 
-
+restart nats 
 
 
 
