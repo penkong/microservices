@@ -2017,15 +2017,21 @@ fetch user Order :
 all case
 with populate
 
+fetch one order 
+show case
+test
+
+delete canecel order :
+update status to cancelled
+test
 
 
+--------------------------------------------------------------
 
 
+SECTION 18 : understand event flow 
 
-
-
-
-
+create new events on common npm for order created and cancelled
 
 
 
