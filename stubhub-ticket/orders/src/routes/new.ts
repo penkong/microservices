@@ -1,20 +1,21 @@
 // -------------------------- Pacakges ------------------------
 
 import express, { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import { body } from 'express-validator'
 import {
   requireAuth,
   validateRequest,
   NotFoundError,
-  OrderStatusEnum
+  OrderStatusEnum,
+  BadRequestError
 } from '@baneeem/common'
-import mongoose from 'mongoose'
 
 // -------------------------- Local --------------------------
 
+import { OrderCreatedPublisher } from '../events'
 import { natsWrapper } from '../nats-wrapper'
 import { Ticket, Order } from '../models'
-import { BadRequestError } from '@baneeem/common'
 
 // -----------------------------------------------------------
 
@@ -62,17 +63,19 @@ router.post(
     await order.save()
 
     // publish to nats order:created
+    await new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expireAt.toISOString(),
+      ticket: {
+        id: ticket.id,
+        price: ticket.price
+      }
+    })
 
     res.status(201).send(order)
   }
 )
 
 export const newOrderRouter = router
-
-// // publisher to nats
-// await new TicketCreatedPublisher(natsWrapper.client).publish({
-//   id: ticket.id,
-//   title: ticket.title,
-//   price: ticket.price,
-//   userId: ticket.userId
-// })

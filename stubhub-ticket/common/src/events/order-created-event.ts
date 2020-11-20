@@ -5,7 +5,7 @@ export interface IOrderCreatedEvent {
   subject: Subjects.OrderCreated
   data: {
     id: string
-    statsu: OrderStatusEnum
+    status: OrderStatusEnum
     userId: string
     expiresAt: string
     ticket: {
