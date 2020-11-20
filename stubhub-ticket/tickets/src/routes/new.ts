@@ -6,7 +6,9 @@ import { requireAuth, validateRequest } from '@baneeem/common'
 
 // -------------------------- Local --------------------------
 
+import { natsWrapper } from '../nats-wrapper'
 import { Ticket } from '../models'
+import { TicketCreatedPublisher } from '../events'
 
 // -----------------------------------------------------------
 
@@ -31,6 +33,15 @@ router.post(
     })
 
     await ticket.save()
+
+    // publisher to nats
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    })
+
     res.status(201).send(ticket)
   }
 )

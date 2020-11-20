@@ -1825,62 +1825,113 @@ restart nats
 
 
 
+--------------------------------------------------------------------
+
+
+SECTION 16 : manage a nats client 
+
+make class out of commond module for publish 
+
+
+create nats client in our project
+
+it must be a singleton because we want share client with other
+part of projects.
+
+remember gracefully shutdown is so important
+
+private _client? : Stan => ? means it may stay undefined for some time 
+
+
+promisify it connect and after that 
+
+now time to use it inside routes
+but because of probable undefined case 
+we use getter  
+
+
+now must be sure destroy nats on shutdown or whatever else
+
+put that logic in index because we dont want it in common with other files and services
+
+
+we have 3 main class for nats publisher listener and wrapper 
+
+
+
+failed event publishing :
+we can await but it bring latency 
+and do we must await for success publish message???
+
+if connection lose we have false data integrity 
+
+
+
+handling publish failed :
+we save event to database and save published state 
+and seprate code watch events
+
+we must do transactional with transaction and event.
+
+we dont do it but we must read it and learn.
 
 
 
 
 
+test with nats :
+
+we use fancy feature of jest .
+fake use mock 
+redirect import 
+
+totally way for case like this 
+1. find the files you want fake like natsWrapper
+2. in same directory make folder called __mocks__
+3. create identical file in folder like original one 
+4. write fake implementation
+5. tell jest use that fake 
+jest.mock('relative path to file  to original file ')
+jest automatically redirect that to __mock__
+
+
+fake implementation:
+just define things from parent class that have usage in your test
+client and publish
+
+add mock func to global file setup 
+
+
+now embed publish test in tests
+
+for that inside __mock make mock functtion  jest.fn().mockImplementation()
+
+then write test and use main natsWrapper but jest provide us mock one
+
+between each single test need reset mock function
+jest.clearAllMocks()
 
 
 
 
+now nats Env Variable :
+clusterId , clientId and server address
+add those to ticket deployment 
+
+we want traceable client id 
+we use name of pod for it 
+how??
+- name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+add those to index
 
 
 
+--------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SECTION 17 : cross service data replication 
 
 
 

@@ -12,6 +12,8 @@ import {
 // -------------------------- Local --------------------------
 
 import { Ticket } from '../models'
+import { TicketUpdatedPublisher } from '../events'
+import { natsWrapper } from '../nats-wrapper'
 
 // -----------------------------------------------------------
 
@@ -29,9 +31,12 @@ router.put(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
+    //
+    //
     const { title, price } = req.body
     const { id } = req.params
 
+    // because we want compare userId with current can not use findandupdate
     const ticket = await Ticket.findById(id)
 
     if (!ticket) throw new NotFoundError()
@@ -44,7 +49,15 @@ router.put(
 
     await ticket.save()
 
-    res.status(200).send({})
+    // publisher to nats
+    await new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId
+    })
+
+    res.status(200).send(ticket)
   }
 )
 

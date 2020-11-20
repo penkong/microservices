@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 // ------------------------ Local --------------------------
 
 import { app } from '../../app'
+import { natsWrapper } from '../../nats-wrapper'
 
 // ---------------------------------------------------------
 
@@ -92,4 +93,25 @@ it('returns updated ticket provided valid inputs', async () => {
 
   expect(ticketRes.body.title).toEqual('new title1')
   expect(ticketRes.body.price).toEqual(5)
+})
+
+it('return a publish event', async () => {
+  const cookie = global.signup()
+
+  const res = await request(app)
+    .post('/api/tickets/')
+    .set('Cookie', cookie)
+    .send({
+      title: 'title1',
+      price: 4
+    })
+
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'new title1', price: 5 })
+    .expect(200)
+
+  // console.log(natsWrapper`)
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 })

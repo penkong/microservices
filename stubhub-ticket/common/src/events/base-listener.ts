@@ -18,7 +18,7 @@ export abstract class Listener<T extends Event> {
     this.client = client
   }
 
-  subscriptionOptions() {
+  private subscriptionOptions() {
     return this.client
       .subscriptionOptions()
       .setDeliverAllAvailable()
@@ -41,7 +41,7 @@ export abstract class Listener<T extends Event> {
     })
   }
 
-  parseMessage(msg: Message) {
+  private parseMessage(msg: Message) {
     const data = msg.getData()
     return typeof data === 'string'
       ? JSON.parse(data)
