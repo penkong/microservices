@@ -1929,18 +1929,29 @@ add those to index
 
 
 
+remember we must save all events in database transactionally
+
+
 --------------------------------------------------------------------------
 
 SECTION 17 : cross service data replication 
 
 
 
+order service 
+it must listen to 2 event ticket:created and ticket:updated
 
+duplicate code 
+i npm 
+build image 
+create k8s dep
+skaffold
+ingress
 
+---
 
-
-
-
+like ticketing 
+make routes
 
 
 
