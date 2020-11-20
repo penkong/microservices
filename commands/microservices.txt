@@ -1953,6 +1953,111 @@ ingress
 like ticketing 
 make routes
 
+---
+
+create order :
+check body ticketId validate it with mongoose like 
+.custom((input: string) => mongoose.Types.ObjectId.isValid(input))
+
+we want get ticketId and base on that create order record and save it 
+
+create order model
+we want reference ticketId or embed docuemnt
+
+how find out ticket reserved or not???
+we use ref/population feature
+
+
+in define interface of new model with ref style 
+we add field in natural (ticket not ticketId) and define type 
+for it ITicketDoc
+
+in make schema we add ref: 'name of model'  to that field .
+
+
+
+add to common lib orderStatus Enum 
+and use it in interface and also in schema by below syntax
+enum : Object.values(OrderStatusEnum)
+
+
+mongoose ref : 'Ticket'  
+there are 3 way to assocaiate order and ticket together 
+this section . vid 11
+
+now create ticket model 
+
+and use ITicketDoc as interface in order definition to use as ref in schema
+
+
+
+
+
+order creation logic :
+
+we make comments in code for show different case s 
+
+also when we have common question - query from our model we embed it inside 
+model itself as field then we can call it on model instance to check condition 
+
+
+when we want add method to model use => schema . statics
+when we want add method to docuemnt use => schema . methods (always function(){})
+
+
+write logic without nats 
+
+
+go for test 
+
+
+
+
+fetch user Order :
+all case
+with populate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

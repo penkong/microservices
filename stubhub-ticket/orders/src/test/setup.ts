@@ -3,11 +3,11 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import request from 'supertest'
+// import request from 'supertest'
 
 // ------------------------ Local --------------------------
 
-import { app } from '../app'
+// import { app } from '../app'
 
 // ------------------------ Define --------------------------
 
