@@ -2113,7 +2113,54 @@ by an arg to func done()
 
 now where update and who update verion :
 
-add version to event 
+add version to event in common 
+
+add version to publisher in services
+
+
+update model with version in other service order 
+
+and update code in onMessage on listeners with below criteria :
+first check version is one below 
+if true 
+update in table 
+
+test with script file .
+
+
+
+
+now better we abstract query method 
+in mongoose
+
+build helper method on ticket model or else 
+to handel fetch version in abstract 
+
+
+behind scene of mongoose update if current 
+
+
+how reach database order ?
+k get pods 
+get mongo related service
+k exec -it podname mongo 
+open shell
+
+
+write test for listeners 
+
+
+---
+
+update orders model with version 
+fix tests 
+fix route orders with publish version 
+
+
+
+
+
+
 
 
 

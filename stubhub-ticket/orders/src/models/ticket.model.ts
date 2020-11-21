@@ -2,6 +2,7 @@
 
 import { OrderStatusEnum } from '@baneeem/common'
 import mongoose from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 // ---------------------- Packages ------------------------
 
@@ -19,12 +20,17 @@ interface ITicketAttrs {
 // this
 interface ITicketModel extends mongoose.Model<ITicketDoc> {
   build(attrs: ITicketAttrs): ITicketDoc
+  findOnEvent(event: {
+    id: string
+    version: number
+  }): Promise<ITicketDoc | null>
 }
 
 // return
 export interface ITicketDoc extends mongoose.Document {
   title: string
   price: number
+  version: number
   isReserved(): Promise<boolean>
 }
 
@@ -53,9 +59,21 @@ const ticketSchema = new mongoose.Schema(
   }
 )
 
+// -------------------------- Plugin -----------------------------------
+
+ticketSchema.set('versionKey', 'version')
+ticketSchema.plugin(updateIfCurrentPlugin)
+
 // -------------------------- Model Logic ------------------------------
 
+// middleware
 ticketSchema.pre('save', async function (done) {
+  // this
+  // for case without plugin
+  // @ts-ignore
+  // this.$where = {
+  //   version: this.get('version') - 1
+  // }
   done()
 })
 
@@ -66,6 +84,10 @@ ticketSchema.statics.build = (attrs: ITicketAttrs) =>
     title: attrs.title,
     price: attrs.price
   })
+
+// add method to model
+ticketSchema.statics.findOnEvent = (event: { id: string; version: number }) =>
+  Ticket.findOne({ _id: event.id, version: event.version })
 
 // add method to schema
 ticketSchema.methods.isReserved = async function () {

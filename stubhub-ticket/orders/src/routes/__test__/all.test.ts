@@ -6,18 +6,18 @@ import mongoose from 'mongoose'
 // ------------------------ Local --------------------------
 
 import { app } from '../../app'
-import { Ticket, Order } from '../../models'
+import { Ticket } from '../../models'
 
 // ---------------------------------------------------------
 
 const buildTicket = async () => {
-  const ticket = Ticket.build({ title: 'con', price: 20 })
+  const ticket = Ticket.build({ id: '1', title: 'con', price: 20 })
   await ticket.save()
   return ticket
 }
 
 it('returns a fetcher order for a particular user', async () => {
-  const ticketId = mongoose.Types.ObjectId()
+  // const ticketId = mongoose.Types.ObjectId()
 
   const ticket1 = await buildTicket()
   const ticket2 = await buildTicket()
