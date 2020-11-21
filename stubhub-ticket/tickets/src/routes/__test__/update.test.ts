@@ -7,6 +7,8 @@ import mongoose from 'mongoose'
 
 import { app } from '../../app'
 import { natsWrapper } from '../../nats-wrapper'
+import { isForInStatement, isTaggedTemplateExpression } from 'typescript'
+import { Ticket } from '../../models'
 
 // ---------------------------------------------------------
 
@@ -114,4 +116,25 @@ it('return a publish event', async () => {
 
   // console.log(natsWrapper`)
   expect(natsWrapper.client.publish).toHaveBeenCalled()
+})
+
+it('return reject is the ticket reserver', async () => {
+  const cookie = global.signup()
+
+  const res = await request(app)
+    .post('/api/tickets/')
+    .set('Cookie', cookie)
+    .send({
+      title: 'title1',
+      price: 4
+    })
+
+  const ticket = await Ticket.findById(res.body.id)
+  ticket?.set({ orderId: mongoose.Types.ObjectId().toHexString() })
+  await ticket?.save()
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'new title1', price: 5 })
+    .expect(400)
 })

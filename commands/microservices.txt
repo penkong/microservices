@@ -2178,17 +2178,22 @@ client inside and dont be tied to other publisher
 
 write test for order created listener 
 
+check mock function args
 
 
 
+make OrderCancelled listener on ticket to inform remove id of order id from ticket
+doc in collection 
 
 
+dont forget to listen on index in ticket service
 
 
+update , update route in ticket to dont let process for pre ordered ticket
 
+------------------------------------------------------------------------
 
-
-
+Section 20 : Expiration worker serverics 
 
 
 

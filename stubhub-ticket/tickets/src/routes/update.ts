@@ -6,7 +6,8 @@ import {
   requireAuth,
   validateRequest,
   NotFoundError,
-  NotAuthorizedError
+  NotAuthorizedError,
+  BadRequestError
 } from '@baneeem/common'
 
 // -------------------------- Local --------------------------
@@ -40,6 +41,7 @@ router.put(
     const ticket = await Ticket.findById(id)
 
     if (!ticket) throw new NotFoundError()
+    if (ticket.orderId) throw new BadRequestError('Already reserved')
     if (ticket.userId !== req.currentUser!.id) throw new NotAuthorizedError()
 
     ticket.set({
