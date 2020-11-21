@@ -6,6 +6,7 @@ export interface IOrderCreatedEvent {
   data: {
     id: string
     status: OrderStatusEnum
+    version: number
     userId: string
     expiresAt: string
     ticket: {

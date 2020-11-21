@@ -2043,13 +2043,77 @@ after that make test ready for added publisher
 
 
 
+---------------------------------------------------------------
+
+SECTION 19 : listener and handling concurrency issues
+
+we put listener for ticket and order
+
+
+
+make listener for ticket created 
+
+after successfully process we must do ack()
+
+we want do data replication on orders with ticket info
+
+but for handle concurrency we must add versioning . 
+
+ticket service -> order service
+  ticket               ticket
+
+must assign id of first ticket as second ticket id challenge 
+must adjust build func  add id to interface
+also must mongo accept it as _id
+
+
+remember : different listeners on a service have common queue group name 
+
+Now Listener for UpdatedTicket
+
+
+now must create instance of each and start to listen on it .
+
+
+after nats started we listen to listener in index.ts
+
+
+handling concurrency :
+need data versioning 
+mongo do this for us .
+
+google for startegy Optimistic concurrency Control 
+
+on change mongoose update version field of doc automatically
+
+
+how impelemnt these in mongoose ????
+
+we use module in mongoose 
+first step 
+handle ticket service
+mongoose-update-if-current npmjs
+attach it to schema 
+scheme.plugin()
+also we say to mongoose we want to rename default name of version
+ticketSchema.set('versionKey', 'version')
+
+also must help ts to understand doc from now on has version key
+
+write test for it 
+
+when using trycatch pattern in jest test you must inform it from finish test 
+help jest out
+by an arg to func done()
 
 
 
 
 
 
+now where update and who update verion :
 
+add version to event 
 
 
 

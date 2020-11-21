@@ -11,6 +11,7 @@ import { Order } from '.'
 
 // input info
 interface ITicketAttrs {
+  id: string
   title: string
   price: number
 }
@@ -59,7 +60,12 @@ ticketSchema.pre('save', async function (done) {
 })
 
 // add method to model
-ticketSchema.statics.build = (attrs: ITicketAttrs) => new Ticket(attrs)
+ticketSchema.statics.build = (attrs: ITicketAttrs) =>
+  new Ticket({
+    _id: attrs.id,
+    title: attrs.title,
+    price: attrs.price
+  })
 
 // add method to schema
 ticketSchema.methods.isReserved = async function () {

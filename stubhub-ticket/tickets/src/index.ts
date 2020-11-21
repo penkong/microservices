@@ -10,6 +10,7 @@ import { natsWrapper } from './nats-wrapper'
 // -----------------------------------------------------
 
 const start = async () => {
+  // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
   if (!process.env.JWT_KEY) throw new Error('JWT_KEY MUST BE DEFINE')
   if (!process.env.MONGO_URI) throw new Error('MONGO_URI MUST BE DEFINE')
   if (!process.env.NATS_URL) throw new Error('NATS_URL MUST BE DEFINE')

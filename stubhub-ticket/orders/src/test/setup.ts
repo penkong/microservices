@@ -30,7 +30,7 @@ let mongo: any
 // hook
 beforeAll(async () => {
   process.env.JWT_KEY = '123456asdf'
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+  // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
   mongo = new MongoMemoryServer()
   const mongoURI = await mongo.getUri()
 
