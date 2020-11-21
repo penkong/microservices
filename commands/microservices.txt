@@ -2156,15 +2156,27 @@ update orders model with version
 fix tests 
 fix route orders with publish version 
 
+---
+
+liteners on ticket service
+
+lock ticket if order created instantiated 
+with what strategy lock ticket ???
+save orderId on ticket model on ticket service 
 
 
+now test for order created listener 
 
 
+because of version ing system we must inform others from change in order created 
+had impact on version of ticket  
 
 
+make client of Listener base class protected that let all other listeners use
+client inside and dont be tied to other publisher 
 
 
-
+write test for order created listener 
 
 
 

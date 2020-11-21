@@ -87,7 +87,7 @@ ticketSchema.statics.build = (attrs: ITicketAttrs) =>
 
 // add method to model
 ticketSchema.statics.findOnEvent = (event: { id: string; version: number }) =>
-  Ticket.findOne({ _id: event.id, version: event.version })
+  Ticket.findOne({ _id: event.id, version: event.version - 1 })
 
 // add method to schema
 ticketSchema.methods.isReserved = async function () {

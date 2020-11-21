@@ -34,6 +34,7 @@ router.delete(
     // publish to nats order:created
     await new OrderCancelledPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: order.verion,
       ticket: {
         id: order.ticket.id
       }

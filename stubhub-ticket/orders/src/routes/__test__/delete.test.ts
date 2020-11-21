@@ -2,6 +2,7 @@
 
 import { OrderStatusEnum } from '@baneeem/common'
 import request from 'supertest'
+import mongoose from 'mongoose'
 
 // ------------------------ Local --------------------------
 
@@ -12,7 +13,11 @@ import { app } from '../../app'
 // ---------------------------------------------------------
 
 it('returns an order as cencelled', async () => {
-  const ticket = Ticket.build({ title: 'tit', price: 10 })
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'tit',
+    price: 10
+  })
   await ticket.save()
   const cookie = global.signup()
 
@@ -33,7 +38,11 @@ it('returns an order as cencelled', async () => {
 })
 
 it('emits a order cancelled', async () => {
-  const ticket = Ticket.build({ title: 'tit', price: 10 })
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'tit',
+    price: 10
+  })
   await ticket.save()
   const cookie = global.signup()
 

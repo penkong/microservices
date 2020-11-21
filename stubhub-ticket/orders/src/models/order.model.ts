@@ -2,9 +2,11 @@
 
 import mongoose from 'mongoose'
 import { OrderStatusEnum } from '@baneeem/common'
-import { ITicketDoc } from '.'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 // ---------------------- Packages ------------------------
+
+import { ITicketDoc } from '.'
 
 // --------------------------------------------------------
 
@@ -27,6 +29,7 @@ interface IOrderDoc extends mongoose.Document {
   status: OrderStatusEnum
   expireAt: Date
   ticket: ITicketDoc
+  verion: number
 }
 
 // --------------------------------------------------------
@@ -62,6 +65,11 @@ const orderSchema = new mongoose.Schema(
     }
   }
 )
+
+// -------------------------- Plugin ------------------------------
+
+orderSchema.set('versionKey', 'version')
+orderSchema.plugin(updateIfCurrentPlugin)
 
 // -------------------------- Model Logic ------------------------------
 

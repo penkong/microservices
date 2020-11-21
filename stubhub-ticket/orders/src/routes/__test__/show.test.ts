@@ -11,7 +11,11 @@ import { Ticket, Order } from '../../models'
 // ---------------------------------------------------------
 
 it('returns an order', async () => {
-  const ticket = Ticket.build({ title: 'tit', price: 10 })
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'tit',
+    price: 10
+  })
   await ticket.save()
   const cookie = global.signup()
 
@@ -31,7 +35,11 @@ it('returns an order', async () => {
 })
 
 it('returns an error if one user try fetch another user order', async () => {
-  const ticket = Ticket.build({ title: 'tit', price: 10 })
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'tit',
+    price: 10
+  })
   await ticket.save()
 
   const { body: order } = await request(app)
