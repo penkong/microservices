@@ -3,6 +3,7 @@
 // --------------- Local ---------------------------
 
 import { natsWrapper } from './nats-wrapper'
+import { OrderCreatedLitener } from './events'
 
 // -----------------------------------------------------
 
@@ -18,6 +19,8 @@ const start = async () => {
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URL
     )
+
+    new OrderCreatedLitener(natsWrapper.client).listen()
 
     natsWrapper.client.on('close', () => {
       console.log('nats connection closed')

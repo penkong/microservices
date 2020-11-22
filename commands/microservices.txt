@@ -2249,27 +2249,33 @@ info sits on job.data
 
 
 
+now add to queue a job on order event .
+use add on queue 
+first item payload 
+
+
+
+add listeners to index
 
 
 
 
+delay job second arg in add 
 
 
+add event complete to common moduel
 
 
+make publisher for expire complete 
+
+in order listen to it  and do logic
+
+write test for it 
 
 
-
-
-
-
-
-
-
-
-
-
-
+to access all different times an function invoked in test
+(natsWrapper.client.publish as jest.Mock).mock.calls
+it is array
 
 
 

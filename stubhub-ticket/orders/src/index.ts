@@ -5,8 +5,12 @@ import mongoose from 'mongoose'
 // --------------- Local ---------------------------
 
 import { app } from './app'
-import { TicketCreatedListener, TicketUpdatedListener } from './events'
 import { natsWrapper } from './nats-wrapper'
+import {
+  TicketCreatedListener,
+  TicketUpdatedListener,
+  ExpirationCompleteListener
+} from './events'
 
 // -----------------------------------------------------
 
@@ -32,6 +36,7 @@ const start = async () => {
     // nats listener
     new TicketCreatedListener(natsWrapper.client).listen()
     new TicketUpdatedListener(natsWrapper.client).listen()
+    new ExpirationCompleteListener(natsWrapper.client).listen()
 
     // nats close case
     natsWrapper.client.on('close', () => {
@@ -54,12 +59,12 @@ const start = async () => {
     console.log('connected to tickets-db')
   } catch (error) {
     // db error connection
-    console.log(error, 'herrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+    console.log(error, 'here')
   }
 
   // listen server
   app.listen(3000, () => {
-    console.log('tickets-service listening on port 3000!!!!!!!!')
+    console.log('tickets-service listening on port 3000!!!!')
   })
 }
 

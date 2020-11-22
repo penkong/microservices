@@ -1,8 +1,11 @@
 // -------------------------- Pacakges ------------------------
 
-import Queue, { Job } from 'bull'
+import Queue from 'bull'
 
 // -------------------------- Local --------------------------
+
+import { ExpirationCompletePublisher } from '../events'
+import { natsWrapper } from '../nats-wrapper'
 
 // -----------------------------------------------------------
 
@@ -19,7 +22,9 @@ const expirationQueue = new Queue<IPayload>('order:expiration', {
 })
 
 expirationQueue.process(async (job) => {
-  console.log('publish an expire event:complete with orderId', job.data.orderId)
+  new ExpirationCompletePublisher(natsWrapper.client).publish({
+    orderId: job.data.orderId
+  })
 })
 
 export { expirationQueue }

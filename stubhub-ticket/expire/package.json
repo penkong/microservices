@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@baneeem/common": "^1.0.12",
+    "@baneeem/common": "^1.0.13",
     "@types/bull": "^3.14.4",
     "bull": "^3.19.1",
     "node-nats-streaming": "^0.3.2",
