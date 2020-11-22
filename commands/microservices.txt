@@ -2196,6 +2196,66 @@ update , update route in ticket to dont let process for pre ordered ticket
 Section 20 : Expiration worker serverics 
 
 
+scheduled message not support by nats
+
+we use bulljs 
+
+we save msg in redis as jobs and after 15 min expire happen . 
+
+remove all server related stuff .
+
+make docker image , k8s 
+for redis and service
+
+add config to expire deployment in env section 
+to how to connect to redis
+
+this service not directly connect to any part of app then 
+we remove port section in deployment file 
+
+there fore we dont need any clusterIP service at all
+
+always add file sync to scaffold file .
+
+
+steps 
+make listener for created order 
+make bulljs 
+make publisher 
+
+with bull we make queue and queue processing 
+
+make queue folder
+make expiration queue file 
+it that enque a job 
+on time 
+job out of redis 
+expiration queue process job
+
+
+
+
+we only put orderId in queue
+
+making queue 
+first arg name of channel 
+second arg option object > which instance we want connect 
+now define interface that describe info to stick in job
+
+
+write job processor inside the queue file 
+info sits on job.data
+
+
+
+
+
+
+
+
+
+
+
 
 
 
