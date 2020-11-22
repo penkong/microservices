@@ -2278,6 +2278,67 @@ to access all different times an function invoked in test
 it is array
 
 
+---------------------------------------------------------------
+
+Section 21 : handling Payment 
+
+
+start with normal flow of creaion of a micro service 
+
+input           order creatd and cancelled 
+collection      cahrges , orders 
+output          charge creatd
+
+
+accross services we need replicate id s remember that .
+
+
+make models for order in payment
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
