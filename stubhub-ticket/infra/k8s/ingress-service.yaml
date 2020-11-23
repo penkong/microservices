@@ -8,7 +8,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
-    # nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
 spec:
   # defaultBackend:
   #   resource:
@@ -26,6 +26,10 @@ spec:
               serviceName: tickets-service
               servicePort: 3000
           - path: /api/orders/?(.*)
+            backend:
+              serviceName: orders-service
+              servicePort: 3000
+          - path: /api/payments/?(.*)
             backend:
               serviceName: orders-service
               servicePort: 3000

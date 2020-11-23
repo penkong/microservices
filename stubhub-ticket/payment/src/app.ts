@@ -8,6 +8,8 @@ import { errorHandler, NotFoundError, currentUser } from '@baneeem/common'
 
 // --------------- Local ---------------------------
 
+import { newPaymentRouter } from './routes'
+
 // -----------------------------------------------------
 
 const app = express()
@@ -25,6 +27,7 @@ app.use(currentUser)
 
 // -----------------------------------------------------
 
+app.use(newPaymentRouter)
 app.all('*', async () => {
   throw new NotFoundError()
 })

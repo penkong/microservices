@@ -14,7 +14,7 @@ import { app } from '../app'
 declare global {
   namespace NodeJS {
     interface Global {
-      signup(): string[]
+      signup(id?: string): string[]
     }
   }
 }
@@ -57,10 +57,10 @@ afterAll(async () => {
 
 // -------------------------- Global Helpers -------------------------
 
-global.signup = () => {
+global.signup = (id: string) => {
   // build a jwt payload . { id, email }
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   }
 

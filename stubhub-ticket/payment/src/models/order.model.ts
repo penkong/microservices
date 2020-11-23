@@ -1,21 +1,20 @@
 // ---------------------- Packages ------------------------
 
-import mongoose from 'mongoose'
+import mongoose, { version } from 'mongoose'
 import { OrderStatusEnum } from '@baneeem/common'
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 // ---------------------- Packages ------------------------
 
-import { ITicketDoc } from '.'
-
 // --------------------------------------------------------
 
 // input info
 interface IOrderAttrs {
-  userId: string
+  id: string
   status: OrderStatusEnum
-  expireAt: Date
-  ticket: ITicketDoc
+  version: number
+  price: number
+  userId: string
 }
 
 // this - current
@@ -25,11 +24,10 @@ interface IOrderModel extends mongoose.Model<IOrderDoc> {
 
 // return
 interface IOrderDoc extends mongoose.Document {
-  userId: string
   status: OrderStatusEnum
-  expireAt: Date
-  ticket: ITicketDoc
-  verion: number
+  version: number
+  price: number
+  userId: string
 }
 
 // --------------------------------------------------------
@@ -43,20 +41,15 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: Object.values(OrderStatusEnum),
-      default: OrderStatusEnum.Created
+      enum: Object.values(OrderStatusEnum)
     },
-    expireAt: {
-      type: mongoose.Schema.Types.Date
-    },
-    ticket: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Ticket',
+    price: {
+      type: Number,
       required: true
     }
   },
   {
-    // view level logic - it is function - projection
+    // view level logic - it is function - projection - doc , returnValue
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id
@@ -73,11 +66,20 @@ orderSchema.plugin(updateIfCurrentPlugin)
 
 // -------------------------- Model Logic ------------------------------
 
+// middleware
 orderSchema.pre('save', async function (done) {
   done()
 })
 
-orderSchema.statics.build = (attrs: IOrderAttrs) => new Order(attrs)
+// model
+orderSchema.statics.build = (attrs: IOrderAttrs) =>
+  new Order({
+    _id: attrs.id,
+    version: attrs.version,
+    price: attrs.price,
+    userId: attrs.userId,
+    status: attrs.status
+  })
 
 const Order = mongoose.model<IOrderDoc, IOrderModel>('Order', orderSchema)
 

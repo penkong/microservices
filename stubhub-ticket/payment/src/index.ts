@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 // --------------- Local ---------------------------
 
 import { app } from './app'
+import { OrderCancelledLitener, OrderCreatedLitener } from './events'
 import { natsWrapper } from './nats-wrapper'
 
 // -----------------------------------------------------
@@ -24,6 +25,9 @@ const start = async () => {
       process.env.NATS_CLIENT_ID,
       process.env.NATS_URL
     )
+
+    new OrderCreatedLitener(natsWrapper.client).listen()
+    new OrderCancelledLitener(natsWrapper.client).listen()
 
     natsWrapper.client.on('close', () => {
       console.log('nats connection closed')
