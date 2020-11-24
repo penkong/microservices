@@ -2291,37 +2291,67 @@ output          charge creatd
 
 
 accross services we need replicate id s remember that .
+remember you must do this on model / build method 
 
 
 make models for order in payment
 
+make 2 related listener 
+
+
+we use strip for credit card payment .
+stripe js 
+
+stripejs --> credit call detail --> api ---> toke ---> stripe js 
+ourjs code -----> token  -----> payment service + token ---> api
 
 
 
+payment service steps with stripe :
+
+find order user try to pay
+make sure order belong to user 
+make sure amounts are equal 
+verify payment wit h stripe api 
+create charge record to record success ful 
 
 
 
+in new route check on edge cases
+
+write tests for it 
+
+
+install node strip sdk 
+
+call method on it to charge user credit card
+
+token , api key 
+
+npm i stripe 
+
+go get key on stripe 
+
+
+add secret key in stipe to cluster 
+sk_test_tXcFki8HZCBj5gRZ8ZDIPov 
+
+with G
+k create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_tXcFki8HZCBj5gRZ8ZDIPov
+
+k get secrets
 
 
 
+go to infra/k8s 
+in payment deployment
 
 
+now for use stripe we create file to import and instantiation of
+stripe library 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+make charge in new route 
+special token that work in dev mode > "token" : "tok_visa"
 
 
 
